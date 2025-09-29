@@ -13,7 +13,7 @@ function AddMarker({ setMarkers }) {
     click(e) {
       setMarkers((prev) => [
         ...prev,
-        { position: e.latlng, title: "Uusi paikka", description: "" },
+        { position: e.latlng, title: "", description: "" },
       ]);
     },
   });
@@ -61,18 +61,38 @@ export default function ParkingMap() {
                 onChange={(e) =>
                   handleChange(idx, "title", e.target.value)
                 }
-                placeholder="Otsikko"
+                placeholder="Nimi"
                 style={{ width: "100%", marginBottom: "5px" }}
               />
               <textarea
                 value={marker.description}
                 onChange={(e) =>
-                  handleChange(idx, "description", e.target.value)
+                  handleChange(idx, "aika", e.target.value)
                 }
-                placeholder="Kuvaus"
-                rows={3}
+                placeholder="Aika"
+                rows={1}
                 style={{ width: "100%" }}
               />
+              <textarea
+                value={marker.description}
+                onChange={(e) =>
+                  handleChange(idx, "hinta", e.target.value)
+                }
+                placeholder="Hinta"
+                rows={1}
+                style={{ width: "100%" }}
+              />
+              <select
+  value={marker.parkkityyppi || ""}
+  onChange={(e) => handleChange(idx, "parkkityyppi", e.target.value)}
+  style={{ width: "100%", marginBottom: "5px" }}
+>
+  <option value="">Valitse tyyppi...</option>
+  <option value="Kadunvarsi">Kadunvarsi</option>
+  <option value="Pysäköintihalli">Pysäköintihalli</option>
+  <option value="Parkkitalo">Parkkipaikka</option>
+  <option value="Muu">Muu</option>
+</select>
               <p style={{ fontSize: "12px", marginTop: "5px" }}>
                 (Poista oikealla klikkauksella)
               </p>
