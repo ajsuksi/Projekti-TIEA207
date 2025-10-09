@@ -35,16 +35,17 @@ export default function ParkingMap() {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       {/* Vasen paneeli */}
-      <Paneeli />
+    <Paneeli />
+    
 
       {/* Kartta oikealle puolelle */}
-      <div style={{ flexGrow: 1 }}>
+      <div style={{ flexGrow: 1, height: "100vh" }}>
         <MapContainer
           center={[62.2415, 25.7209]}
           zoom={12}
-          style={{ height: "100vh", width: "200vh" }}
+          style={{ height: "100%", width: "100%" }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
@@ -68,14 +69,14 @@ export default function ParkingMap() {
                     style={{ width: "100%", marginBottom: "5px" }}
                   />
                   <textarea
-                    value={marker.description}
+                    value={marker.aika}
                     onChange={(e) => handleChange(idx, "aika", e.target.value)}
                     placeholder="Aika"
                     rows={1}
                     style={{ width: "100%" }}
                   />
                   <textarea
-                    value={marker.description}
+                    value={marker.hinta}
                     onChange={(e) => handleChange(idx, "hinta", e.target.value)}
                     placeholder="Hinta"
                     rows={1}

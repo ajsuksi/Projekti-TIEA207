@@ -2,9 +2,8 @@ export default function Paneeli() {
   return (
     <div
       style={{
-        width: "300px",
+        width: "250px",
         backgroundColor: "rgba(19, 18, 18, 1)",
-        padding: "1rem",
         borderRight: "1px solid #ccc",
       }}
     >
