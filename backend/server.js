@@ -1,33 +1,43 @@
-import express from "express"
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 
-
 const app = express();
 app.use(cors());
-app.use(express.json()); //Sallii json datan vastaanoton
+app.use(express.json()); // Sallii JSON-datan vastaanoton
 
-let notes = [
-  // ...
+// Esimerkkidata
+let places = [
+  {
+    id: "1",
+    tyyppi: "parkkihalli",
+    maksu: "1,30",
+    maksutapa: "moovy",
+  },
 ];
 
-
-//TODO: GET ja POST
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World</h1>');
+app.get("/", (req, res) => {
+  res.send("<h1>Tervetuloa  API:in!");
 });
 
-app.get('/api/notes:id', (request, response) => {
-  const id = request.params.id
-  const note = notes.find(note => note.id === id)
- if (note) {
-    response.json(note)
-  } else {
-    response.status(404).end()
-  }
-})
+// Hae kaikki paikat
+app.get("/api/places", (req, res) => {
+  res.json(places);
+});
 
-//Käynnistää palvelimen
+// Hae yksittäinen paikka ID:n perusteella
+app.get("/api/places/:id", (req, res) => {
+  const id = req.params.id;
+  const place = places.find((p) => p.id === id);
+
+  if (place) {
+    res.json(place);
+  } else {
+    res.status(404).json({ error: "Paikkaa ei löytynyt" });
+  }
+});
+
+// Käynnistää palvelimen
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
