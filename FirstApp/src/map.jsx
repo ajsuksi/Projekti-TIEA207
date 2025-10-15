@@ -68,20 +68,72 @@ export default function ParkingMap() {
                     placeholder="Nimi"
                     style={{ width: "100%", marginBottom: "5px" }}
                   />
-                  <textarea
+                  
+                  <label>
+                  <input
+                    type="radio"
+                    name={`maksullinen-${idx}`}
+                    value="ilmainen"
+                    checked={marker.maksullinen === "ilmainen"}
+                    onChange={(e)=> handleChange(idx, "maksullinen", e.target.value)}
+                  />     
+                  {" "} Ilmainen
+                  </label>      
+                  
+                  <label>
+                  <input
+                    type="radio"
+                    name={`maksullinen-${idx}`}
+                    value="maksullinen"
+                    checked={marker.maksullinen === "maksullinen"}
+                    onChange={(e)=> handleChange(idx, "maksullinen", e.target.value)}
+                  />     
+                  {" "} Maksullinen
+                  </label>      
+                  
+                  {marker.maksullinen === "maksullinen" && (
+                    <div>
+                    <input
+                    type="text"
+                    value={marker.hinta}
+                    onChange={(e) => handleChange(idx, "hinta", e.target.value)}
+                    placeholder="Hinta"
+                    rows={1}
+                    style={{ width: "100%" }}
+                    />
+                    {["Kortti", "Käteinen", "Moovy"].map((maksutapa) => (
+                      <label key={maksutapa} style={{display: "block"}}>
+                        <input
+                          type="checkbox"
+                          checked={marker.maksutavat?.includes(maksutapa) || false}
+                          onChange={(e) => {
+                            const selected = marker.maksutavat || [];
+                            const updated = e.target.checked
+                            ? [...selected, maksutapa]
+                            : selected.filter((v) => v != maksutapa)
+                            handleChange(idx, "maksutavat", updated)
+                          }}
+                        />
+                        {" "}{maksutapa}
+                      </label>
+                    ))}
+                  </div>
+                  )}
+                  
+                    
+
+                  {marker.maksullinen === "ilmainen" && (
+                    <input
+                    type="text"
                     value={marker.aika}
                     onChange={(e) => handleChange(idx, "aika", e.target.value)}
                     placeholder="Aika"
                     rows={1}
                     style={{ width: "100%" }}
                   />
-                  <textarea
-                    value={marker.hinta}
-                    onChange={(e) => handleChange(idx, "hinta", e.target.value)}
-                    placeholder="Hinta"
-                    rows={1}
-                    style={{ width: "100%" }}
-                  />
+                  )}
+                  
+                  
                   <select
                     value={marker.parkkityyppi || ""}
                     onChange={(e) =>
@@ -98,6 +150,12 @@ export default function ParkingMap() {
                   <p style={{ fontSize: "12px", marginTop: "5px" }}>
                     (Poista oikealla klikkauksella)
                   </p>
+                    
+                  
+                  <input
+                  type="button"
+                  value="Tallenna"
+                  />
                 </div>
               </Popup>
             </Marker>
