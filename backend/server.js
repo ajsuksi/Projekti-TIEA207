@@ -37,6 +37,28 @@ app.get("/api/places/:id", (req, res) => {
   }
 });
 
+// Lisää uusi paikka
+const generateId = () => {
+  const maxId =
+    places.length > 0 ? Math.max(...places.map((n) => Number(n.id))) : 0;
+  return String(maxId + 1);
+};
+
+app.post("/api/places", (request, response) => {
+  const body = request.body;
+
+  const place = {
+    tyyppi: body.tyyppi,
+    maksu: body.maksu,
+    maksutapa: body.maksutapa,
+    id: generateId(),
+  };
+
+  places = places.concat(place);
+
+  response.json(place);
+});
+
 // Käynnistää palvelimen
 const PORT = 3001;
 app.listen(PORT, () => {
