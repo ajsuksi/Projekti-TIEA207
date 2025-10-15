@@ -3,7 +3,6 @@ export default function Paneeli() {
     <div
       style={{
         width: "250px",
-        backgroundColor: "rgba(255, 254, 254, 1)",
         borderRight: "1px solid #ccc",
       }}
     >
