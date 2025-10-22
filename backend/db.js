@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 //Yhdistä mongoon
+const connectDB =async () =>{
 mongoose.set('strictQuery', false)
 const url = process.env.MONGODB_URI
 
@@ -12,6 +13,7 @@ mongoose.connect(url)
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
   })
+}
 
   module.exports = connectDB;
 
