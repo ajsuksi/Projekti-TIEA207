@@ -1,49 +1,55 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
+//import express from "express";
+//import cors from "cors";
+//import dotenv from "dotenv";
 
+
+require("dotenv").config();
+const express= require("express");
 const app = express();
-app.use(cors());
 app.use(express.json()); // Sallii JSON-datan vastaanoton
+const cors = require("cors");
+app.use(cors());
 
-// Esimerkkidata
-let places = [
-  {
-    id: "1",
-    tyyppi: "parkkihalli",
-    maksu: "1,30",
-    maksutapa: "moovy",
-  },
-];
+//yhdistä mongodb
+const connectDB =require('./db.js');
+const placesModel =require('./models/places.js');
+connectDB(); //yhdistä database
 
-app.get("/", (req, res) => {
-  res.send("<h1>Tervetuloa  API:in!");
+
+//Get ja Post ->>> MUUTA
+app.get("/api/places",async (req, res) => {
+  try{
+  const places = await placesModel.find()
+  res.json(places)
+  }catch (error){res.status(500).json({ error: "Tietojen haku epäonnistui" });
+}
+  //res.send("<h1>Tervetuloa  API:in!");
 });
 
-// Hae kaikki paikat
+/*  Hae kaikki paikat
 app.get("/api/places", (req, res) => {
   res.json(places);
-});
+}); */
 
 // Hae yksittäinen paikka ID:n perusteella
-app.get("/api/places/:id", (req, res) => {
-  const id = req.params.id;
-  const place = places.find((p) => p.id === id);
-
-  if (place) {
-    res.json(place);
-  } else {
-    res.status(404).json({ error: "Paikkaa ei löytynyt" });
+app.get("/api/places/:id", async (req, res) => {
+  try {
+    const place = await placesModels.findById(req.params.id);
+    if (place) res.json(place);
+    else res.status(404).json({ error: "Paikkaa ei löytynyt" });
+  } catch (error) {
+    res.status(400).json({ error: "Virheellinen ID" });
   }
 });
 
-// Lisää uusi paikka
+/* // Lisää uusi paikka
 const generateId = () => {
   const maxId =
     places.length > 0 ? Math.max(...places.map((n) => Number(n.id))) : 0;
   return String(maxId + 1);
-};
+}; */
 
+//TODO:
 app.post("/api/places", (request, response) => {
   const body = request.body;
 
