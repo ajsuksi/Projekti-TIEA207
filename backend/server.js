@@ -2,27 +2,26 @@
 //import cors from "cors";
 //import dotenv from "dotenv";
 
-
 require("dotenv").config();
-const express= require("express");
+const express = require("express");
 const app = express();
 app.use(express.json()); // Sallii JSON-datan vastaanoton
 const cors = require("cors");
 app.use(cors());
 
 //yhdistä mongodb
-const connectDB =require('./db.js');
-const placesModel =require('./models/places.js');
+const connectDB = require("./db.js");
+const placesModel = require("./models/places.js");
 connectDB(); //yhdistä database
 
-
 //Get ja Post ->>> MUUTA
-app.get("/api/places",async (req, res) => {
-  try{
-  const places = await placesModel.find()
-  res.json(places)
-  }catch (error){res.status(500).json({ error: "Tietojen haku epäonnistui" });
-}
+app.get("/api/places", async (req, res) => {
+  try {
+    const places = await placesModel.find();
+    res.json(places);
+  } catch (error) {
+    res.status(500).json({ error: "Tietojen haku epäonnistui" });
+  }
   //res.send("<h1>Tervetuloa  API:in!");
 });
 
@@ -50,17 +49,19 @@ const generateId = () => {
 }; */
 
 //TODO:
-app.post("/api/places", (request, response) => {
+app.post("/api/places", async (request, response) => {
+  console.log("inside post function");
   const body = request.body;
 
-  const place = {
+  const place = new placesModel({
     tyyppi: body.tyyppi,
     maksu: body.maksu,
     maksutapa: body.maksutapa,
-    id: generateId(),
-  };
+    //id: generateId(),
+  });
 
-  places = places.concat(place);
+  const val = await place.save();
+  console.log("Saved place:", val);
 
   response.json(place);
 });
