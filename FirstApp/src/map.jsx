@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Paneeli from "./paneeli";
-import {MapContainer,TileLayer,Marker,Popup,useMapEvents,} from "react-leaflet";
+import { MapContainer,TileLayer,Marker,Popup,useMapEvents, } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 //Lisää markerin
@@ -35,7 +35,7 @@ export default function ParkingMap() {
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       {/* Vasen paneeli */}
     <Paneeli />
-    
+
 
       {/* Kartta oikealle puolelle */}
       <div style={{ flexGrow: 1, height: "100vh" }}>
@@ -65,29 +65,29 @@ export default function ParkingMap() {
                     placeholder="Nimi"
                     style={{ width: "100%", marginBottom: "5px" }}
                   />
-                  
+
                   <label>
                   <input
                     type="radio"
                     name={`maksullinen-${idx}`}
                     value="ilmainen"
                     checked={marker.maksullinen === "ilmainen"}
-                    onChange={(e)=> handleChange(idx, "maksullinen", e.target.value)}
-                  />     
+                    onChange={(e) => handleChange(idx, "maksullinen", e.target.value)}
+                  />
                   {" "} Ilmainen
-                  </label>      
-                  
+                  </label>
+
                   <label>
                   <input
                     type="radio"
                     name={`maksullinen-${idx}`}
                     value="maksullinen"
                     checked={marker.maksullinen === "maksullinen"}
-                    onChange={(e)=> handleChange(idx, "maksullinen", e.target.value)}
-                  />     
+                    onChange={(e) => handleChange(idx, "maksullinen", e.target.value)}
+                  />
                   {" "} Maksullinen
-                  </label>      
-                  
+                  </label>
+
                   {marker.maksullinen === "maksullinen" && (
                     <div>
                     <input
@@ -99,7 +99,7 @@ export default function ParkingMap() {
                     style={{ width: "100%" }}
                     />
                     {["Kortti", "Käteinen", "Moovy"].map((maksutapa) => (
-                      <label key={maksutapa} style={{display: "block"}}>
+                      <label key={maksutapa} style={{ display: "block" }}>
                         <input
                           type="checkbox"
                           checked={marker.maksutavat?.includes(maksutapa) || false}
@@ -116,8 +116,8 @@ export default function ParkingMap() {
                     ))}
                   </div>
                   )}
-                  
-                    
+
+
 
                   {marker.maksullinen === "ilmainen" && (
                     <input
@@ -129,8 +129,8 @@ export default function ParkingMap() {
                     style={{ width: "100%" }}
                   />
                   )}
-                  
-                  
+
+
                   <select
                     value={marker.parkkityyppi || ""}
                     onChange={(e) =>
@@ -147,8 +147,8 @@ export default function ParkingMap() {
                   <p style={{ fontSize: "12px", marginTop: "5px" }}>
                     (Poista oikealla klikkauksella)
                   </p>
-                    
-                  
+
+
                   <input
                   type="button"
                   value="Tallenna"
