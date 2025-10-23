@@ -1,60 +1,51 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
 
+require("dotenv").config();
+const express = require("express");
 const app = express();
-app.use(cors());
 app.use(express.json()); // Sallii JSON-datan vastaanoton
+const cors = require("cors");
+app.use(cors());
 
-// Esimerkkidata
-let places = [
-  {
-    id: "1",
-    tyyppi: "parkkihalli",
-    maksu: "1,30",
-    maksutapa: "moovy",
-  },
-];
+//yhdistä Mongodb
+const connectDB = require("./db.js");
+const placesModel = require("./models/places.js");
+connectDB(); //yhdistä database
 
-app.get("/", (req, res) => {
-  res.send("<h1>Tervetuloa  API:in!");
-});
-
-// Hae kaikki paikat
-app.get("/api/places", (req, res) => {
-  res.json(places);
-});
-
-// Hae yksittäinen paikka ID:n perusteella
-app.get("/api/places/:id", (req, res) => {
-  const id = req.params.id;
-  const place = places.find((p) => p.id === id);
-
-  if (place) {
-    res.json(place);
-  } else {
-    res.status(404).json({ error: "Paikkaa ei löytynyt" });
+//Get Method
+app.get("/api/places", async (req, res) => {
+  try {
+    const places = await placesModel.find();
+    res.json(places);
+  } catch (error) {
+    res.status(500).json({ error: "Tietojen haku epäonnistui" });
   }
 });
 
-// Lisää uusi paikka
-const generateId = () => {
-  const maxId =
-    places.length > 0 ? Math.max(...places.map((n) => Number(n.id))) : 0;
-  return String(maxId + 1);
-};
+// Hae yksittäinen paikka ID:n perusteella
+app.get("/api/places/:id", async (req, res) => {
+  try {
+    const place = await placesModels.findById(req.params.id);
+    if (place) res.json(place);
+    else res.status(404).json({ error: "Paikkaa ei löytynyt" });
+  } catch (error) {
+    res.status(400).json({ error: "Virheellinen ID" });
+  }
+});
 
-app.post("/api/places", (request, response) => {
+
+//Post method
+app.post("/api/places", async (request, response) => {
+  console.log("inside post function");
   const body = request.body;
 
-  const place = {
+  const place = new placesModel({
     tyyppi: body.tyyppi,
     maksu: body.maksu,
     maksutapa: body.maksutapa,
-    id: generateId(),
-  };
+  });
 
-  places = places.concat(place);
+  const val = await place.save();
+  console.log("Saved place:", val);
 
   response.json(place);
 });
