@@ -1,14 +1,9 @@
 import { useState } from "react";
 import Paneeli from "./paneeli";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
-} from "react-leaflet";
+import {MapContainer,TileLayer,Marker,Popup,useMapEvents,} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
+//Lisää markerin
 function AddMarker({ setMarkers }) {
   useMapEvents({
     click(e) {
@@ -24,10 +19,12 @@ function AddMarker({ setMarkers }) {
 export default function ParkingMap() {
   const [markers, setMarkers] = useState([]);
 
+  //Poistaa markerin
   const handleRemove = (index) => {
     setMarkers((prev) => prev.filter((_, i) => i !== index));
   };
 
+  //valitse maksutavan
   const handleChange = (index, field, value) => {
     setMarkers((prev) =>
       prev.map((m, i) => (i === index ? { ...m, [field]: value } : m))
