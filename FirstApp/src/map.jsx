@@ -4,13 +4,19 @@ import { MapContainer,TileLayer,Marker,Popup,useMapEvents, } from "react-leaflet
 import "leaflet/dist/leaflet.css";
 
 //Lisää markerin
-function AddMarker({ setMarkers }) {
+function MapClickHandler({onAddMarker }) {
   useMapEvents({
     click(e) {
-      setMarkers((prev) => [
-        ...prev,
-        { position: e.latlng, title: "", description: "" },
-      ]);
+      const newMarker = {
+        tyyppi: "parkkityyppi",
+        maksu: false,
+        maksutapa: [],
+        aikarajoitus: null,
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
+        lisatiedot: ""
+      };
+      onAddMarker(newMarker);
     },
   });
   return null;
@@ -31,6 +37,21 @@ export default function ParkingMap() {
     );
   };
 
+  const saveMarker = async (marker) => {
+    
+    try {
+      const res = await fetch("http://localhost:3001/api/places/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(marker),
+      });
+      const saved = await res.json();
+      console.log("Marker saved", saved);
+    } catch (err) {
+      console.error("Virhe tallennuksessa", err);
+    }
+  };
+
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       {/* Vasen paneeli */}
@@ -46,12 +67,14 @@ export default function ParkingMap() {
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-          <AddMarker setMarkers={setMarkers} />
+          <MapClickHandler onAddMarker={(newMarker) => 
+            setMarkers((prev) => [...prev, newMarker])
+          } />
 
           {markers.map((marker, idx) => (
             <Marker
               key={idx}
-              position={marker.position}
+              position={[marker.lat, marker.lng]}
               eventHandlers={{
                 contextmenu: () => handleRemove(idx), // oikea klikkaus poistaa
               }}
@@ -149,10 +172,11 @@ export default function ParkingMap() {
                   </p>
 
 
-                  <input
-                  type="button"
-                  value="Tallenna"
-                  />
+                  <button
+                  onClick={() => saveMarker(marker)}
+                  >
+                    Tallenna
+                  </button>
                 </div>
               </Popup>
             </Marker>
