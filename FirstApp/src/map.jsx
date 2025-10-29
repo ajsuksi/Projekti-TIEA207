@@ -2,6 +2,7 @@ import { useState } from "react";
 import Paneeli from "./paneeli";
 import { MapContainer,TileLayer,Marker,Popup,useMapEvents, } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { saveMarker } from "./mapUtilities";
 
 //Lisää markerin
 function MapClickHandler({onAddMarker }) {
@@ -23,8 +24,8 @@ function MapClickHandler({onAddMarker }) {
 }
 
 export default function ParkingMap() {
-  const [markers, setMarkers] = useState([]);
-
+ const [markers, setMarkers] = useState([]);
+  
   //Poistaa markerin
   const handleRemove = (index) => {
     setMarkers((prev) => prev.filter((_, i) => i !== index));
@@ -35,39 +36,6 @@ export default function ParkingMap() {
     setMarkers((prev) =>
       prev.map((m, i) => (i === index ? { ...m, [field]: value } : m))
     );
-  };
-
-  const saveMarker = async (index) => {
-
-    const m = markers[index];
-    if (!m) {
-      console.error("Marker ei löytynyt indexillä", index);
-      return;
-    }
-
-    const payload = {
-      tyyppi: m.parkkityyppi,
-      maksu: m.maksullinen === "maksullinen",
-      maksutapa: m.maksutavat || [],
-      aikarajoitus: m.aika || null,
-      sijainti: {
-        lat: m.lat,
-        lng: m.lng,
-      },
-      lisatiedot: null,
-    };
-    
-    try {
-      const res = await fetch("http://localhost:3001/api/places/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify(payload),
-      });
-      const saved = await res.json();
-      console.log("Marker saved", saved);
-    } catch (err) {
-      console.error("Virhe tallennuksessa", err);
-    }
   };
 
   return (
@@ -191,7 +159,7 @@ export default function ParkingMap() {
 
 
                   <button
-                  onClick={() => saveMarker(idx)}
+                  onClick={() => saveMarker(marker)}
                   >
                     Tallenna
                   </button>
