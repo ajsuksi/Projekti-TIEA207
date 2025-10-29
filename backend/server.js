@@ -35,19 +35,32 @@ app.get("/api/places/:id", async (req, res) => {
 
 //Post method
 app.post("/api/places", async (request, response) => {
-  console.log("inside post function");
-  const body = request.body;
+  try{
+   const { tyyppi, maksu, hinta, maksutapa, aikarajoitus, sijainti, lisatiedot } = request.body;
 
-  const place = new placesModel({
-    tyyppi: body.tyyppi,
-    maksu: body.maksu,
-    maksutapa: body.maksutapa,
-  });
+  // Tarkistetaan että pakolliset kentät on annettu
+  if (!tyyppi || maksu === undefined) {
+    return response.status(400).json({ error: "Puuttuvia kenttiä (tyyppi tai maksu)" });
+  }
 
-  const val = await place.save();
-  console.log("Saved place:", val);
+    const place = new placesModel({
+      tyyppi,
+      maksu,
+      hinta,
+      maksutapa,
+      aikarajoitus,
+      sijainti,
+      lisatiedot,
+    });
+const val = await place.save(); 
+console.log("Saved place:", val); 
+response.status(201).json(place);
 
-  response.json(place);
+  }catch (error) {
+    console.error("Virhe tallennettaessa paikkaa:", error.message);
+    response.status(500).json({ error: "Paikan tallennus epäonnistui" });
+  }
+ 
 });
 
 // Käynnistää palvelimen
