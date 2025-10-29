@@ -71,17 +71,17 @@ export default function ParkingMap() {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
+    <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
       {/* Vasen paneeli */}
     <Paneeli />
 
 
       {/* Kartta oikealle puolelle */}
-      <div style={{ flexGrow: 1, height: "100vh" }}>
+      <div style={{ height: "100vh", width: "100vw" }}>
         <MapContainer
           center={[62.2415, 25.7209]}
           zoom={12}
-          style={{ height: "100%", width: "100%" }}
+          style={{ height: "100%", width: "100%", zIndex: 1 }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
