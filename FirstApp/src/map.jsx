@@ -37,13 +37,31 @@ export default function ParkingMap() {
     );
   };
 
-  const saveMarker = async (marker) => {
+  const saveMarker = async (index) => {
+
+    const m = markers[index];
+    if (!m) {
+      console.error("Marker ei löytynyt indexillä", index);
+      return;
+    }
+
+    const payload = {
+      tyyppi: m.parkkityyppi,
+      maksu: m.maksullinen === "maksullinen",
+      maksutapa: m.maksutavat || [],
+      aikarajoitus: m.aika || null,
+      sijainti: {
+        lat: m.lat,
+        lng: m.lng,
+      },
+      lisatiedot: null,
+    };
     
     try {
       const res = await fetch("http://localhost:3001/api/places/", {
         method: "POST",
         headers: { "Content-Type": "application/json"},
-        body: JSON.stringify(marker),
+        body: JSON.stringify(payload),
       });
       const saved = await res.json();
       console.log("Marker saved", saved);
@@ -173,7 +191,7 @@ export default function ParkingMap() {
 
 
                   <button
-                  onClick={() => saveMarker(marker)}
+                  onClick={() => saveMarker(idx)}
                   >
                     Tallenna
                   </button>
