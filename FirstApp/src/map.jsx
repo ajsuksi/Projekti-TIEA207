@@ -1,14 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Paneeli from "./paneeli";
 import { MapContainer,TileLayer,Marker,Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MapClickHandler from "./AddMarker";
 import MarkerPopup from "./AddPopup";
+import { getMarkers } from "./mapUtilities";
 
 
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
-  
+
+ //Hakee paikat ja muuttaa ne sopivaan muotoon
+  useEffect(() => {
+    const fetchData = async () => {
+      const places = await getMarkers(); 
+      const normalized = places.map((p) => {
+          const lat = p.sijainti?.lat ?? p.lat ?? null;
+          const lng = p.sijainti?.lng ?? p.lng ?? null;
+
+          // jos lat/lng ei ole numero, palauta null 
+          if (typeof lat !== "number" || typeof lng !== "number") return null;
+
+          return {
+
+            _id: p._id,
+            tyyppi: p.tyyppi,
+            maksu: p.maksu,
+            hinta: p.hinta,
+            maksutapa: p.maksutapa,
+            aikarajoitus: p.aikarajoitus,
+            lisatiedot: p.lisatiedot,
+            lat,
+            lng,
+          };
+        })
+        .filter(Boolean); // poistaa kaikki null-arvot
+      setMarkers(normalized);
+    };
+
+    fetchData();
+  }, []);
+
+
   //Poistaa markerin
   const handleRemove = (index) => {
     setMarkers((prev) => prev.filter((_, i) => i !== index));

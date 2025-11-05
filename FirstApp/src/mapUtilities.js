@@ -25,3 +25,18 @@
       console.error("Virhe tallennuksessa", err);
     }
   };
+
+  export const getMarkers = async () => {
+  try {
+    const response = await fetch("http://localhost:3001/api/places");
+    if (!response.ok) {
+      throw new Error("Virhe paikkojen haussa");
+    }
+    const data = await response.json();
+    console.log("Haetut paikat:", data);
+    return data;
+  } catch (err) {
+    console.error("Paikkojen hakeminen epäonnistui:", err);
+    return [];
+  }
+};
