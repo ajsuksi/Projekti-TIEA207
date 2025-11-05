@@ -1,14 +1,9 @@
  export const saveMarker = async (marker) => {
 
-    /* const m = markers[index];
-    if (!m) {
-      console.error("Marker ei löytynyt indexillä", index);
-      return;
-    } */
-
     const payload = {
       tyyppi: marker.parkkityyppi,
       maksu: marker.maksullinen === "maksullinen",
+      hinta:marker.hinta,
       maksutapa: marker.maksutavat || [],
       aikarajoitus: marker.aika || null,
       sijainti: {

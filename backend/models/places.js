@@ -7,7 +7,7 @@ const placeSchema = new mongoose.Schema({
   maksu: { type: Boolean, required: false },
   hinta: {type: String, required: false},
   maksutapa: [{ type: String }],
-  aikarajoitus: { type: Number, required: false },
+  aikarajoitus: { type: String, required: false },
   sijainti: {
     lat: { type: Number, required: false },
     lng: { type: Number, required: false },
