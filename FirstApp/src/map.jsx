@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import MapClickHandler from "./AddMarker";
 import MarkerPopup from "./AddPopup";
 import { getMarkers } from "./mapUtilities";
+import ViewPopup from "./ViewPopup";
 
 
 export default function ParkingMap() {
@@ -56,9 +57,9 @@ export default function ParkingMap() {
 
   return (
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
+
       {/* Vasen paneeli */}
     <Paneeli />
-
 
       {/* Kartta oikealle puolelle */}
       <div style={{ height: "100vh", width: "100vw" }}>
@@ -75,18 +76,22 @@ export default function ParkingMap() {
 
           {markers.map((marker, idx) => (
             <Marker
-              key={idx}
+              key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
               position={[marker.lat, marker.lng]}
               eventHandlers={{ contextmenu: () => handleRemove(idx),  }}
               >
-              <Popup>
-              <MarkerPopup
-              marker={marker}
-              idx={idx}
-              handleChange={handleChange}
-              />
-              </Popup>
-            </Marker>
+                <Popup> 
+                  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
+                    <ViewPopup marker={marker} />
+                  ) : (
+                    <MarkerPopup
+                    marker={marker}
+                    idx={idx}
+                    handleChange={handleChange}
+                    />
+                  )}
+                </Popup>
+              </Marker>
           ))}
         </MapContainer>
       </div>

@@ -10,7 +10,7 @@
         lat: marker.lat,
         lng: marker.lng,
       },
-      lisatiedot: null,
+      lisatiedot: marker.lisatiedot || null,
     };
     
     try {

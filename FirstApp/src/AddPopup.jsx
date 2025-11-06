@@ -99,8 +99,8 @@ return(
 
                    <input
                     type="text"
-                    value={marker.title}
-                    onChange={(e) => handleChange(idx, "title", e.target.value)}
+                    value={marker.lisatiedot || ""}
+                    onChange={(e) => handleChange(idx, "lisatiedot", e.target.value)}
                     placeholder="Lisätietoja"
                     style={{ width: "100%", marginBottom: "10px" }}
                   />

@@ -10,10 +10,8 @@ export default function MapClickHandler({onAddMarker }) {
         hinta: "",
         maksutapa: [],
         aikarajoitus: null,
-        sijainti: {
-         lat: { type: Number, required: false },
-         lng:  { type: Number, required: false },
-        },
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
         lisatiedot: ""
       };
       onAddMarker(newMarker);
