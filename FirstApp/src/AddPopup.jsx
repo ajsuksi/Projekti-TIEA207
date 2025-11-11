@@ -1,7 +1,7 @@
 import { saveMarker } from "./mapUtilities";
 
 //PopUp lomakkeen hallinta
-export default function MarkerPopup ({marker, idx, handleChange}){
+export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers}){
 
 return(
     <div style={{ minWidth: "150px" }}>
@@ -105,13 +105,9 @@ return(
                     style={{ width: "100%", marginBottom: "10px" }}
                   />
 
-                   <p style={{ fontSize: "12px", marginTop: "0px" }}>
-                    (Poista oikealla klikkauksella)
-                  </p>
-
 
                   <button
-                  onClick={() => saveMarker(marker)}
+                  onClick={() => saveMarker(marker, setMarkers)}
                   style={{
                     width: "100%",
                     padding: "8px",
@@ -122,6 +118,25 @@ return(
                   }}
                   >
                     Tallenna
+                  </button>
+
+                  <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log("Poistetaan marker:", marker);
+                    handleRemove(marker);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    marginTop: "3px",
+                    backgroundColor: "#da4e4eff",
+                    color: "#000000ff",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                  >
+                    Poista
                   </button>
                 </div> 
 

@@ -1,4 +1,4 @@
- export const saveMarker = async (marker) => {
+ export const saveMarker = async (marker, setMarkers) => {
 
     const payload = {
       tyyppi: marker.parkkityyppi,
@@ -21,6 +21,14 @@
       });
       const saved = await res.json();
       console.log("Marker saved", saved);
+
+      setMarkers((prevMarkers) =>
+      prevMarkers.map((m) =>
+      m.sijainti?.lat === marker.lat && m.sijainti?.lng === marker.lng
+      ? saved
+      : m
+      )
+    );
     } catch (err) {
       console.error("Virhe tallennuksessa", err);
     }

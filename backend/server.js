@@ -54,13 +54,25 @@ app.post("/api/places", async (request, response) => {
     });
 const val = await place.save(); 
 console.log("Saved place:", val); 
-response.status(201).json(place);
+console.log("Lähetetään takaisin frontendille:", val.toObject());
+response.status(201).json(val);
 
   }catch (error) {
     console.error("Virhe tallennettaessa paikkaa:", error.message);
     response.status(500).json({ error: "Paikan tallennus epäonnistui" });
   }
  
+});
+
+app.delete("/api/places/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Place.findByIdAndDelete(id);
+    res.status(200).json({message: "Paikan poisto onnistui"});
+  } catch (error) {
+    console.error("Virhe paikan poistossa:", error);
+    res.status(500).json({ error: "Paikan poisto epäonnistui"});
+  }
 });
 
 // Käynnistää palvelimen
