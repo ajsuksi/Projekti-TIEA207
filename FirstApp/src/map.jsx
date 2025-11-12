@@ -10,6 +10,12 @@ import ViewPopup from "./ViewPopup";
 
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
+ //const [filteredTypes, setFilteredTypes] = useState(["Kadunvarsi", "Pysäköintihalli", "Parkkipaikka", "Muu"]);
+ const [filters, setFilters] = useState({
+    selectedTypes: ["Kadunvarsi", "Pysäköintihalli", "Parkkipaikka", "Muu"],
+    showPaid: true,
+    showFree: true,
+ })
 
  //Hakee paikat ja muuttaa ne sopivaan muotoon
   useEffect(() => {
@@ -23,7 +29,6 @@ export default function ParkingMap() {
           if (typeof lat !== "number" || typeof lng !== "number") return null;
 
           return {
-
             _id: p._id,
             tyyppi: p.tyyppi,
             maksu: p.maksu,
@@ -42,6 +47,10 @@ export default function ParkingMap() {
     fetchData();
   }, []);
 
+/*   const visibleMarkers = markers.filter((marker) =>
+    !marker.tyyppi || filteredTypes.includes(marker.tyyppi)
+  ); */
+
 
   //Poistaa markerin
   const handleRemove = (index) => {
@@ -59,7 +68,7 @@ export default function ParkingMap() {
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
 
       {/* Vasen paneeli */}
-    <Paneeli />
+    <Paneeli onFilterChange={setFilters} />
 
       {/* Kartta oikealle puolelle */}
       <div style={{ height: "100vh", width: "100vw" }}>
@@ -74,25 +83,35 @@ export default function ParkingMap() {
             setMarkers((prev) => [...prev, newMarker])
           } />
 
-          {markers.map((marker, idx) => (
-            <Marker
-              key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
-              position={[marker.lat, marker.lng]}
-              eventHandlers={{ contextmenu: () => handleRemove(idx),  }}
-              >
-                <Popup> 
-                  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
-                    <ViewPopup marker={marker} />
-                  ) : (
-                    <MarkerPopup
-                    marker={marker}
-                    idx={idx}
-                    handleChange={handleChange}
-                    />
-                  )}
-                </Popup>
-              </Marker>
-          ))}
+          {markers.map((marker, i) => {
+            // suodatus
+            if (marker.tyyppi==="parkkityyppi" || filters.selectedTypes.includes(marker.tyyppi) && ((marker.maksu && filters.showPaid) || (!marker.maksu && filters.showFree))) {
+              // varmistetaan, että lat/lng ovat numeroita
+              const lat = marker.lat;
+              const lng = marker.lng;
+              if (typeof lat !== "number" && typeof lng !== "number") return null;
+
+              return (
+                <Marker
+                  key={marker._id || i} /* jos ei id:tä, käytä indeksiä */
+                  position={[lat, lng]}
+                  eventHandlers={{ contextmenu: () => handleRemove(i) }}
+                >
+                  <Popup> 
+                    {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
+                      <ViewPopup marker={marker} />
+              ) : (
+                      <MarkerPopup
+                        marker={marker}
+                        idx={i}
+                        handleChange={handleChange}
+                      />)
+              }
+                  </Popup>
+                </Marker>
+          );
+        }
+      return null;})}
         </MapContainer>
       </div>
     </div>

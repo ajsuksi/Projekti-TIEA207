@@ -1,8 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Paneeli() {
-  const [onMaksullinen, asetaMaksullinen] = useState(true);
-  const [onIlmainen, asetaIlmainen] = useState(true);
+export default function Paneeli({onFilterChange}) {
+  const [selectedTypes, setSelectedTypes] = useState(["Kadunvarsi", "Pysäköintihalli", "Parkkipaikka", "Muu"]);
+  const [showPaid, setShowPaid] = useState(true);
+  const [showFree, setShowFree] = useState(true);
+
+  const handleChange = (type) => {
+    setSelectedTypes((prev) => 
+      prev.includes(type)
+      ? prev.filter((t) => t !== type)
+      : [...prev, type]);
+  };
+
+  useEffect(() => {
+    onFilterChange({selectedTypes, showPaid, showFree});
+  }, [selectedTypes, showPaid, showFree, onFilterChange]);
+
+
 
   return (
     <div
@@ -28,7 +42,37 @@ export default function Paneeli() {
         e.currentTarget.style.transform = "translateX(-9vw)"; // Piilotetaan paneeli
       }}
     >
-      <h3>Parkkipaikat</h3>
+
+      <h3>Parkkipaikan tyyppi</h3>
+      {["Kadunvarsi", "Pysäköintihalli", "Parkkipaikka", "Muu"].map((type) => (
+        <label key={type} style={{display: "block"}}>
+          <input
+            type="checkbox"
+            checked={selectedTypes.includes(type)}
+            onChange={() => handleChange(type)}
+            />
+          {" "}{type}
+        </label>
+      ))}
+
+      <h3>Maksullisuus</h3>
+      <label style={{display: "block"}}>
+        <input
+          type="checkbox"
+          checked={showPaid}
+          onChange={() => setShowPaid(!showPaid)}
+          />
+        {" "}Maksullinen
+        </label>
+        <label style={{display: "block"}}>
+        <input
+          type="checkbox"
+          checked={showFree}
+          onChange={() => setShowFree(!showFree)}
+          />
+        {" "}Ilmainen
+        </label>
+{/*       <h3>Parkkipaikat</h3>
       <div>
         <strong>Tyyppi:</strong>
         <br />
@@ -108,7 +152,7 @@ export default function Paneeli() {
         </label>
         <br />
       </div>
-      </>)}
+      </>)} */}
     </div>
   );
 }
