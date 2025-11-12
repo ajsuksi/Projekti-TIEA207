@@ -4,17 +4,29 @@ export default function Paneeli({onFilterChange}) {
   const [selectedTypes, setSelectedTypes] = useState(["Kadunvarsi", "Pysäköintihalli", "Parkkipaikka", "Muu"]);
   const [showPaid, setShowPaid] = useState(true);
   const [showFree, setShowFree] = useState(true);
+  const [selectedPayments, setSelectedPayments] = useState([
+    "Kortti",
+    "Käteinen",
+    "Moovy",
+  ]);
 
-  const handleChange = (type) => {
+  const handleTypeChange = (type) => {
     setSelectedTypes((prev) => 
       prev.includes(type)
       ? prev.filter((t) => t !== type)
       : [...prev, type]);
   };
 
+  const handlePaymentChange = (method) => {
+    setSelectedPayments((prev) =>
+      prev.includes(method)
+      ? prev.filter((m) => m !== method)
+      : [...prev, method]);
+  };
+
   useEffect(() => {
-    onFilterChange({selectedTypes, showPaid, showFree});
-  }, [selectedTypes, showPaid, showFree, onFilterChange]);
+    onFilterChange({selectedTypes, showPaid, showFree, selectedPayments});
+  }, [selectedTypes, showPaid, showFree, selectedPayments, onFilterChange]);
 
 
 
@@ -49,7 +61,7 @@ export default function Paneeli({onFilterChange}) {
           <input
             type="checkbox"
             checked={selectedTypes.includes(type)}
-            onChange={() => handleChange(type)}
+            onChange={() => handleTypeChange(type)}
             />
           {" "}{type}
         </label>
@@ -72,6 +84,25 @@ export default function Paneeli({onFilterChange}) {
           />
         {" "}Ilmainen
         </label>
+      
+      {/* Näytetään maksutavat, jos "Maksullinen" on valittu */}
+      {showPaid && (
+        <>
+        {/*   <hr style={{ margin: "1rem 0" }} />  */}
+        <h3>Maksutavat</h3>
+        {["Kortti", "Käteinen", "Moovy"].map((method) => (
+          <label key={method} style={{display: "block"}}>
+            <input
+              type="checkbox"
+              checked={selectedPayments.includes(method)}
+              onChange={() => handlePaymentChange(method)}
+              />
+            {" "}{method}
+          </label>
+        ))}
+        </>
+      )}
+
 {/*       <h3>Parkkipaikat</h3>
       <div>
         <strong>Tyyppi:</strong>

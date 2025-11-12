@@ -15,6 +15,7 @@ export default function ParkingMap() {
     selectedTypes: ["Kadunvarsi", "Pysäköintihalli", "Parkkipaikka", "Muu"],
     showPaid: true,
     showFree: true,
+    selectedPayments: ["Kortti", "Käteinen", "Moovy"],
  })
 
  //Hakee paikat ja muuttaa ne sopivaan muotoon
@@ -85,7 +86,7 @@ export default function ParkingMap() {
 
           {markers.map((marker, i) => {
             // suodatus
-            if (marker.tyyppi==="parkkityyppi" || filters.selectedTypes.includes(marker.tyyppi) && ((marker.maksu && filters.showPaid) || (!marker.maksu && filters.showFree))) {
+            if (marker.tyyppi==="parkkityyppi" || filters.selectedTypes.includes(marker.tyyppi) && ((marker.maksu && filters.showPaid) || (!marker.maksu && filters.showFree)) && (!marker.maksu || (marker.maksutapa?.length === 0 || marker.maksutapa.some((t) => filters.selectedPayments.includes(t))))) {
               // varmistetaan, että lat/lng ovat numeroita
               const lat = marker.lat;
               const lng = marker.lng;
