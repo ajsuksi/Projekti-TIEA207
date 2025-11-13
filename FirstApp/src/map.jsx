@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import Paneeli from "./paneeli";
 import { MapContainer,TileLayer,Marker,Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -6,10 +6,19 @@ import MapClickHandler from "./AddMarker";
 import MarkerPopup from "./AddPopup";
 import { getMarkers } from "./mapUtilities";
 import ViewPopup from "./ViewPopup";
+import {useFilterMarkers } from "./filterMarkers"
 
 
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
+
+   const {
+    filters,
+    handleFreeChange,
+    handleTypeChange,
+    availableTypes,
+    filteredPlaces,
+  } = useFilterMarkers(markers);
 
  //Hakee paikat ja muuttaa ne sopivaan muotoon
   useEffect(() => {
@@ -33,6 +42,7 @@ export default function ParkingMap() {
             lisatiedot: p.lisatiedot,
             lat,
             lng,
+            isFree: !p.maksu,  
           };
         })
         .filter(Boolean); // poistaa kaikki null-arvot
@@ -41,7 +51,6 @@ export default function ParkingMap() {
 
     fetchData();
   }, []);
-
 
   //Poistaa markerin
   const handleRemove = (index) => {
@@ -55,11 +64,18 @@ export default function ParkingMap() {
     );
   };
 
+
   return (
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
 
       {/* Vasen paneeli */}
-    <Paneeli />
+    <Paneeli 
+    filters={filters}
+    availableTypes={availableTypes}
+    onFreeChange={handleFreeChange}
+    onTypeChange={handleTypeChange}
+    filteredCount={filteredPlaces.length}
+    />
 
       {/* Kartta oikealle puolelle */}
       <div style={{ height: "100vh", width: "100vw" }}>
@@ -74,7 +90,7 @@ export default function ParkingMap() {
             setMarkers((prev) => [...prev, newMarker])
           } />
 
-          {markers.map((marker, idx) => (
+          {filteredPlaces.map((marker, idx) => (
             <Marker
               key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
               position={[marker.lat, marker.lng]}
