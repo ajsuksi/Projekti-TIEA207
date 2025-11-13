@@ -1,114 +1,55 @@
-import { useState } from "react";
 
-export default function Paneeli() {
-  const [onMaksullinen, asetaMaksullinen] = useState(true);
-  const [onIlmainen, asetaIlmainen] = useState(true);
-
+export default function Paneeli ({ filters, availableTypes, onFreeChange, onTypeChange, filteredCount })  {
   return (
-    <div
+     <div
       style={{
         position: "absolute",
         zIndex: 1000,
-        width: "10vw",
+        width: "15vw",
         left: 0,
         top: 0,
         height: "100vh",
         borderRight: "1px solid #ccc",
-        /* paddingLeft: "1rem", */
         padding: "1rem",
-        transform: "translateX(-9vw)", // Piilotetaan (10vw - 9vw kahva)
+        transform: "translateX(-9vw)", 
         transition: "transform 0.3s ease-in-out",
-        backgroundColor: "#222",
-        color: "white",
+        backgroundColor: "#141313ff",
+        color: "White",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateX(0)"; // Näytetään paneeli
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateX(-9vw)"; // Piilotetaan paneeli
+        e.currentTarget.style.transform = "translateX(-12vw)"; // Piilotetaan paneeli
       }}
     >
       <h3>Parkkipaikat</h3>
-      <div>
-        <strong>Tyyppi:</strong>
-        <br />
-        <label>
-          <input type="checkbox" name="kadunvarsi" defaultChecked />
-          Kadunvarsi
-        </label>
-        <br />
-
-        <label>
-          <input type="checkbox" name="pysakointihalli" defaultChecked />
-          Pysäköintihalli
-        </label>
-        <br />
-
-        <label>
-          <input type="checkbox" name="parkkipaikka" defaultChecked />
-          Parkkipaikka
-        </label>
-        <br />
-
-        <label>
-          <input type="checkbox" name="muu" defaultChecked />
-          Muu
-        </label>
-      </div>
-      <br />
+      <h4>Rajaa paikkoja:</h4>
       
-      <div>
-        <strong>Maksullisuus:</strong>
-        <br />
-
-        <label>
+      {/* Maksullisuus*/}
+      <label>
+        <input
+          type="checkbox"
+          checked={filters.freeOnly}
+          onChange={onFreeChange}
+        />
+        Vain ilmaiset
+      </label>
+      
+      {/* Tyyppi */}
+      <h4>Tyyppi</h4>
+      {availableTypes.map(type => (
+        <label key={type} style={{ display: 'block' }}>
           <input
             type="checkbox"
-            name="ilmainen"
-            checked={onIlmainen}
-            onChange={() => asetaIlmainen(!onIlmainen)}
+            checked={filters.valitutTyypit.includes(type)}
+            onChange={onTypeChange(type)}
           />
-          Ilmainen
+          {type.charAt(0).toUpperCase() + type.slice(1)}
         </label>
-        <br />
-
-        <label>
-          <input
-            type="checkbox"
-            name="maksullinen"
-            checked={onMaksullinen}
-            onChange={() => asetaMaksullinen(!onMaksullinen)}
-          />
-          Maksullinen
-        </label>
-        <br />
-      </div>
-      <br />
-
-{ onMaksullinen && (
-  <>
-      <div>
-        <strong>Maksutapa:</strong>
-        <br />
-        <label>
-          <input type="checkbox" name="kortti" defaultChecked />
-          Kortti
-        </label>
-        <br />
-
-        <label>
-          <input type="checkbox" name="kateinen" defaultChecked />
-          Käteinen
-        </label>
-        <br />
-
-        <label>
-          <input type="checkbox" name="moovy" defaultChecked />
-          Moovy
-        </label>
-        <br />
-      </div>
-      </>)}
+      ))}
+      
+      <p>Näytetään {filteredCount} paikkaa</p>
     </div>
   );
-}
+};
