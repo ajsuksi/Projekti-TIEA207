@@ -51,12 +51,12 @@ export default function ParkingMap() {
     }
     if (window.confirm("Haluatko varmasti poistaa parkkipaikan?")){      
       try {
-        const response = await fetch('http://localhost:3001/api/places/${markerId}', {
+        const response = await fetch(`http://localhost:3001/api/places/${markerId}`, {
           method: "DELETE",
         });
         if(!response.ok) throw new Error("Tietokannasta poisto epäonnistui");
         setMarkers((prev) => prev.filter((m) => m._id !== markerId));        
-        console.log("Paikka poistettuu onnistuneesti");
+        console.log("Paikka poistettu onnistuneesti");
       } catch (error) {
         console.error("Virhe poistossa:", error);
         alert("Paikan poistaminen epäonnistui");
@@ -95,10 +95,9 @@ export default function ParkingMap() {
               key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
               position={[marker.lat, marker.lng]}              
               >
-                <Popup> 
-                  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
+                <Popup>  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
                     <ViewPopup marker={marker} />
-                  ) : (
+                  ) :  (
                     <MarkerPopup
                     marker={marker}
                     idx={idx}

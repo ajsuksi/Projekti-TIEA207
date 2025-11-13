@@ -1,4 +1,4 @@
-
+const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -66,12 +66,21 @@ response.status(201).json(val);
 
 app.delete("/api/places/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    await Place.findByIdAndDelete(id);
-    res.status(200).json({message: "Paikan poisto onnistui"});
-  } catch (error) {
-    console.error("Virhe paikan poistossa:", error);
-    res.status(500).json({ error: "Paikan poisto epäonnistui"});
+    const id = req.params.id.trim();
+    console.log("Saapuva ID:", id);
+
+    const deleted = await placesModel.findByIdAndDelete(id);
+
+    if (!deleted) {
+      console.log("Paikkaa ei löytynyt poistettavaksi");
+      return res.status(404).json({ error: "Paikkaa ei löytynyt" });
+    }
+
+    console.log("Paikka poistettu onnistuneesti!");
+    res.status(200).json({ message: "Paikan poisto onnistui" });
+  } catch (err) {
+    console.error("Virhe paikan poistossa:", err);
+    res.status(500).json({ error: "Paikan poisto epäonnistui" });
   }
 });
 
