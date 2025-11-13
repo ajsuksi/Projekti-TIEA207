@@ -96,7 +96,9 @@ export default function ParkingMap() {
               position={[marker.lat, marker.lng]}              
               >
                 <Popup>  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
-                    <ViewPopup marker={marker} />
+                    <ViewPopup 
+                    marker={marker}
+                    handleRemove={handleRemove} />
                   ) :  (
                     <MarkerPopup
                     marker={marker}
