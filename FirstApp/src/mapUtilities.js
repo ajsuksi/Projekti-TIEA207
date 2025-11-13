@@ -1,4 +1,4 @@
- export const saveMarker = async (marker) => {
+ export const saveMarker = async (marker, setMarkers) => {
 
     const payload = {
       tyyppi: marker.parkkityyppi,
@@ -21,6 +21,21 @@
       });
       const saved = await res.json();
       console.log("Marker saved", saved);
+
+      //päivittää paikalle id:n
+      const normalizedMarker = {
+        ...marker,
+        _id: saved._id,
+        sijainti: saved.sijainti || {
+          lat: marker.lat,
+          lng: marker.lng,
+        },
+      };
+      setMarkers((prevMarkers) =>
+        prevMarkers.map((m) =>
+          m.lat === marker.lat && m.lng === marker.lng ? normalizedMarker : m
+      )
+    );
     } catch (err) {
       console.error("Virhe tallennuksessa", err);
     }

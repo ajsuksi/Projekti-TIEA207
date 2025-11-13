@@ -44,8 +44,24 @@ export default function ParkingMap() {
 
 
   //Poistaa markerin
-  const handleRemove = (index) => {
-    setMarkers((prev) => prev.filter((_, i) => i !== index));
+  const handleRemove = async (markerId) => {
+    if (!markerId) {
+      console.error("Marker id puuttuu");
+      return;
+    }
+    if (window.confirm("Haluatko varmasti poistaa parkkipaikan?")){      
+      try {
+        const response = await fetch(`http://localhost:3001/api/places/${markerId}`, {
+          method: "DELETE",
+        });
+        if(!response.ok) throw new Error("Tietokannasta poisto epäonnistui");
+        setMarkers((prev) => prev.filter((m) => m._id !== markerId));        
+        console.log("Paikka poistettu onnistuneesti");
+      } catch (error) {
+        console.error("Virhe poistossa:", error);
+        alert("Paikan poistaminen epäonnistui");
+      }
+    }
   };
 
   //valitse maksutavan
@@ -77,17 +93,19 @@ export default function ParkingMap() {
           {markers.map((marker, idx) => (
             <Marker
               key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
-              position={[marker.lat, marker.lng]}
-              eventHandlers={{ contextmenu: () => handleRemove(idx),  }}
+              position={[marker.lat, marker.lng]}              
               >
-                <Popup> 
-                  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
-                    <ViewPopup marker={marker} />
-                  ) : (
+                <Popup>  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
+                    <ViewPopup 
+                    marker={marker}
+                    handleRemove={handleRemove} />
+                  ) :  (
                     <MarkerPopup
                     marker={marker}
                     idx={idx}
                     handleChange={handleChange}
+                    handleRemove={handleRemove}
+                    setMarkers={setMarkers}
                     />
                   )}
                 </Popup>

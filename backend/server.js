@@ -1,4 +1,4 @@
-
+const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -54,13 +54,34 @@ app.post("/api/places", async (request, response) => {
     });
 const val = await place.save(); 
 console.log("Saved place:", val); 
-response.status(201).json(place);
+console.log("Lähetetään takaisin frontendille:", val.toObject());
+response.status(201).json(val);
 
   }catch (error) {
     console.error("Virhe tallennettaessa paikkaa:", error.message);
     response.status(500).json({ error: "Paikan tallennus epäonnistui" });
   }
  
+});
+
+app.delete("/api/places/:id", async (req, res) => {
+  try {
+    const id = req.params.id.trim();
+    console.log("Saapuva ID:", id);
+
+    const deleted = await placesModel.findByIdAndDelete(id);
+
+    if (!deleted) {
+      console.log("Paikkaa ei löytynyt poistettavaksi");
+      return res.status(404).json({ error: "Paikkaa ei löytynyt" });
+    }
+
+    console.log("Paikka poistettu onnistuneesti!");
+    res.status(200).json({ message: "Paikan poisto onnistui" });
+  } catch (err) {
+    console.error("Virhe paikan poistossa:", err);
+    res.status(500).json({ error: "Paikan poisto epäonnistui" });
+  }
 });
 
 // Käynnistää palvelimen
