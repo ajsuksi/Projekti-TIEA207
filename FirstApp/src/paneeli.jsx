@@ -1,5 +1,5 @@
 
-export default function Paneeli ({ filters, availableTypes, onFreeChange, onTypeChange, filteredCount })  {
+export default function Paneeli ({ filters, availableTypes, onFreeChange, onTypeChange, filteredCount,onCostsChange, onPaymentMethodChange, availablePayments })  {
   return (
      <div
       style={{
@@ -35,6 +35,15 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         />
         Vain ilmaiset
       </label>
+      <br/>
+      <label>
+        <input
+        type= "checkbox"
+        checked={filters.vainMaksulliset}
+        onChange={onCostsChange}
+        />
+        Vain maksulliset
+      </label>
       
       {/* Tyyppi */}
       <h4>Tyyppi</h4>
@@ -46,6 +55,19 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
             onChange={onTypeChange(type)}
           />
           {type.charAt(0).toUpperCase() + type.slice(1)}
+        </label>
+      ))}
+
+      {/* Maksutapa */}
+      <h4>Maksutapa</h4>
+      {availablePayments.map(method => (
+        <label key={method} style={{ display: 'block' }}>
+          <input
+            type="checkbox"
+            checked={filters.valitutMaksutavat.includes(method)}
+            onChange={onPaymentMethodChange(method)}
+          />
+          {method.charAt(0).toUpperCase() + method.slice(1)}
         </label>
       ))}
       
