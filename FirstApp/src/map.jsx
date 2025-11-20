@@ -18,6 +18,9 @@ export default function ParkingMap() {
     handleTypeChange,
     availableTypes,
     filteredPlaces,
+    handleCostsChange,
+    handlePaymentMethodChange,
+    availablePaymentMethods
   } = useFilterMarkers(markers);
 
  //Hakee paikat ja muuttaa ne sopivaan muotoon
@@ -90,6 +93,9 @@ export default function ParkingMap() {
     availableTypes={availableTypes}
     onFreeChange={handleFreeChange}
     onTypeChange={handleTypeChange}
+    onCostsChange={handleCostsChange}
+    onPaymentMethodChange={handlePaymentMethodChange}
+    availablePayments={availablePaymentMethods}
     filteredCount={filteredPlaces.length}
     />
 
