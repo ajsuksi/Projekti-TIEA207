@@ -3,33 +3,28 @@ import React, { useState } from "react";
 
 
 //PopUp lomakkeen hallinta
-export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers}){
-const [notice, setNotice] = useState("");
+export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice}){
+const handleSave = async () => {
+    try {
+      const saved = await saveMarker(marker); // kutsutaan puhdasta utilia
+
+      // Päivitetään markerille backendin antama _id
+      setMarkers(prev =>
+        prev.map(m =>
+          m.lat === marker.lat && m.lng === marker.lng
+            ? { ...m, _id: saved._id }
+            : m
+        )
+      );
+      setNotice("Paikka tallennettu!");
+      setTimeout(() => setNotice(""), 4000);
+    } catch (err) {
+      setNotice("Tallennus epäonnistui");
+      setTimeout(() => setNotice(""), 5000);
+    }
+  };
 return(
     <div style={{ position: "relative", minWidth: "150px" }}>
-
-      {/* 🔔 ILMOITUS KÄYTTÄJÄLLE */}
-      {notice && (
-        <div
-          style={{
-            position: "absolute",
-            top: "-40px",
-            left: "0",
-            right: "0",
-            margin: "0 auto",
-            background: "#4caf50",
-            color: "white",
-            padding: "6px 10px",
-            fontSize: "14px",
-            borderRadius: "6px",
-            textAlign: "center",
-            width: "95%",
-            zIndex: 9999,
-          }}
-        >
-          {notice}
-        </div>
-      )}
 
       <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>
         Lisää parkkipaikka
@@ -133,7 +128,7 @@ return(
 
 
                   <button
-                  onClick={() => saveMarker(marker, setMarkers, setNotice)}
+                  onClick={() => handleSave()}
                   style={{
                     width: "100%",
                     padding: "8px",

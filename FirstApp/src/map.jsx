@@ -7,10 +7,12 @@ import MarkerPopup from "./AddPopup";
 import { getMarkers } from "./mapUtilities";
 import ViewPopup from "./ViewPopup";
 import {useFilterMarkers } from "./filterMarkers"
+import Ilmoitus from "./ilmoitus";
 
 
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
+ const [notice, setNotice] = useState("");
 
    const {
     filters,
@@ -83,6 +85,8 @@ export default function ParkingMap() {
 
   return (
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
+      
+      <Ilmoitus message={notice}/>
 
       {/* Vasen paneeli */}
     <Paneeli 
@@ -122,6 +126,7 @@ export default function ParkingMap() {
                     handleChange={handleChange}
                     handleRemove={handleRemove}
                     setMarkers={setMarkers}
+                    setNotice={setNotice}
                     />
                   )}
                 </Popup>
