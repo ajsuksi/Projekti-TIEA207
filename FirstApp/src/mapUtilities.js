@@ -1,4 +1,4 @@
- export const saveMarker = async (marker, setMarkers) => {
+ export const saveMarker = async (marker, setMarkers, setNotice) => {
 
     const payload = {
       tyyppi: marker.parkkityyppi,
@@ -22,6 +22,8 @@
       const saved = await res.json();
       console.log("Marker saved", saved);
 
+    
+
       //päivittää paikalle id:n
       const normalizedMarker = {
         ...marker,
@@ -36,8 +38,17 @@
           m.lat === marker.lat && m.lng === marker.lng ? normalizedMarker : m
       )
     );
+    if (setNotice) {
+      setNotice("Paikka tallennettu!");
+      setTimeout(() => setNotice(""), 3000);
+    }
     } catch (err) {
       console.error("Virhe tallennuksessa", err);
+
+      if (setNotice) {
+        setNotice("Tallennus epäonnistui");
+        setTimeout(() => setNotice(""), 3000);
+      }
     }
   };
 
