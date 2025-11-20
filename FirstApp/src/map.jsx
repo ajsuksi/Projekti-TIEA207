@@ -7,6 +7,7 @@ import MarkerPopup from "./AddPopup";
 import { getMarkers } from "./mapUtilities";
 import ViewPopup from "./ViewPopup";
 import {useFilterMarkers } from "./filterMarkers"
+import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
 
 
 export default function ParkingMap() {
@@ -115,7 +116,16 @@ export default function ParkingMap() {
           {filteredPlaces.map((marker, idx) => (
             <Marker
               key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
-              position={[marker.lat, marker.lng]}              
+              position={[marker.lat, marker.lng]} 
+              icon= { 
+                marker.tyyppi === "Kadunvarsi 🟢"
+                ? greenMarker
+                : marker.tyyppi === "Pysäköintihalli 🔴"
+                ? redMarker
+                :marker.tyyppi ==="Parkkipaikka 🔵"
+                ? blueMarker
+                : orangeMarker
+              }            
               >
                 <Popup>  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
                     <ViewPopup 

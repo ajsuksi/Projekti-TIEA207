@@ -1,6 +1,9 @@
 import { useState, useMemo } from "react";
 
-{/*Kartalla näkyvien markkereiden filtteröinti maksullisuuden ja tyypin mukaan*/}
+/**
+ * @param {*} markers kaikki markerit kartalla
+ * @returns palauttaa filtteröinti muuttujat tyypin, maksullisuuden ja maksutavan mukaan. 
+ */
 
 export function useFilterMarkers(markers) {
   const [filters, setFilters] = useState({
