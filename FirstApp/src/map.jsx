@@ -6,11 +6,12 @@ import MapClickHandler from "./AddMarker";
 import MarkerPopup from "./AddPopup";
 import { getMarkers } from "./mapUtilities";
 import ViewPopup from "./ViewPopup";
-import {useFilterMarkers } from "./filterMarkers"
+import {useFilterMarkers } from "./filterMarkers";
 
 
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
+ const [editingMarkerId, setEditingMarkerId] = useState(null); // Markerin muokkaustila
 
    const {
     filters,
@@ -101,28 +102,30 @@ export default function ParkingMap() {
           style={{ height: "100%", width: "100%", zIndex: 1 }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
+          
+          {editingMarkerId === null && ( // uuden markerin lisäys vain jos ei ole muokkaustilassa
           <MapClickHandler onAddMarker={(newMarker) => 
             setMarkers((prev) => [...prev, newMarker])
-          } />
+          } /> )}
 
           {filteredPlaces.map((marker, idx) => (
             <Marker
               key={marker._id || idx} /* jos ei id:tä, käytä indeksiä */
               position={[marker.lat, marker.lng]}              
               >
-                <Popup>  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
-                    <ViewPopup 
-                    marker={marker}
-                    handleRemove={handleRemove} />
-                  ) :  (
+                <Popup>  {editingMarkerId === marker._id ? ( /* Jos markerilla muokkaustila, näytetään muokkauslomake */
                     <MarkerPopup
                     marker={marker}
-                    idx={idx}
+                    idx={marker._id}
                     handleChange={handleChange}
                     handleRemove={handleRemove}
                     setMarkers={setMarkers}
                     />
+                  ) :  (
+                    <ViewPopup 
+                    marker={marker}
+                    onEdit={() => setEditingMarkerId(marker._id)}
+                    handleRemove={handleRemove} />
                   )}
                 </Popup>
               </Marker>

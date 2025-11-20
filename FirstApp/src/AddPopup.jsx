@@ -1,13 +1,44 @@
 import { saveMarker } from "./mapUtilities";
+import { useEffect, useState } from "react";
 
 
 //PopUp lomakkeen hallinta
 export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers}){
 
+  console.log("AddPopup sai marker-propsin:", marker);
+
+const [newMarker, setNewMarker] = useState({
+  tyyppi: "",
+  maksu: false,
+  hinta: "",
+  maksutapa: [],
+  aikarajoitus: "",
+  lat: "",
+  lng: "",
+  lisatiedot: ""
+});
+ 
+// Täyttää lomakkeen tiedot, jos muokataan olemassa olevaa markkeria
+useEffect(() => {
+  if (marker) {
+    setNewMarker({
+      tyyppi: marker.tyyppi ?? "",
+      maksu: marker.maksu ?? false,
+      hinta: marker.hinta ?? "",
+      maksutapa: marker.maksutapa ?? [],
+      aikarajoitus: marker.aikarajoitus ?? "",
+      lat: marker.lat,
+      lng: marker.lng,
+      lisatiedot: marker.lisatiedot ?? "",
+      _id: marker._id ?? null,     // tallenna id jotta muokkaus/lisäys erottuu
+    });
+  }
+}, [marker]);
+
 return(
     <div style={{ minWidth: "150px" }}>
       <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>
-        Lisää parkkipaikka
+        {newMarker._id ? "Muokkaa parkkipaikkaa" : "Lisää parkkipaikka"}
       </h4>
                   Osoite:
                   <input
@@ -24,8 +55,8 @@ return(
                     type="radio"
                     name={`maksullinen-${idx}`}
                     value="ilmainen"
-                    checked={marker.maksullinen === "ilmainen"}
-                    onChange={(e) => handleChange(idx, "maksullinen", e.target.value)}
+                    checked={!newMarker.maksu}/* {marker.maksullinen === "ilmainen"} */
+                    onChange={(e) => setNewMarker({...newMarker, maksu: !newMarker.maksu})}
                   />
                   {" "} Ilmainen
                   </label>
@@ -35,18 +66,18 @@ return(
                     type="radio"
                     name={`maksullinen-${idx}`}
                     value="maksullinen"
-                    checked={marker.maksullinen === "maksullinen"}
-                    onChange={(e) => handleChange(idx, "maksullinen", e.target.value)}
+                    checked={newMarker.maksu}/* {marker.maksullinen === "maksullinen"} */
+                    onChange={(e) => setNewMarker({...newMarker, maksu: !newMarker.maksu})}
                   />
                   {" "} Maksullinen
                   </label>
 
-                  {marker.maksullinen === "maksullinen" && (
+                  {newMarker.maksu && (
                     <div>
                     <input
                     type="text"
-                    value={marker.hinta || ""}
-                    onChange={(e) => handleChange(idx, "hinta", e.target.value)}
+                    value={newMarker.hinta || ""}
+                    onChange={(e) => setNewMarker({...newMarker, hinta: e.target.value})}
                     placeholder="Hinta"
                     rows={1}
                     style={{ width: "100%" }}
@@ -55,13 +86,13 @@ return(
                       <label key={maksutapa} style={{ display: "block" }}>
                         <input
                           type="checkbox"
-                          checked={marker.maksutavat?.includes(maksutapa) || false}
+                          checked={newMarker.maksutapa.includes(maksutapa) || false}
                           onChange={(e) => {
-                            const selected = marker.maksutavat || [];
+                            const selected = newMarker.maksutapa || [];
                             const updated = e.target.checked
                             ? [...selected, maksutapa]
                             : selected.filter((v) => v != maksutapa)
-                            handleChange(idx, "maksutavat", updated)
+                            setNewMarker({...newMarker, maksutapa: updated})
                           }}
                         />
                         {" "}{maksutapa}
@@ -72,11 +103,11 @@ return(
 
 
 
-                  {marker.maksullinen === "ilmainen" && (
+                  {!newMarker.maksu && (
                     <input
                     type="text"
-                    value={marker.aika || ""}
-                    onChange={(e) => handleChange(idx, "aika", e.target.value)}
+                    value={newMarker.aikarajoitus || ""}
+                    onChange={(e) => setNewMarker({...newMarker, aikarajoitus: e.target.value})}
                     placeholder="Aikarajoitus"
                     rows={1}
                     style={{ width: "100%", marginBottom: "10px"}}
@@ -85,9 +116,9 @@ return(
 
 
                   <select
-                    value={marker.parkkityyppi || ""}
+                    value={newMarker.tyyppi || ""}
                     onChange={(e) =>
-                      handleChange(idx, "parkkityyppi", e.target.value)
+                      setNewMarker(prev => ({ ...prev, tyyppi: e.target.value }))
                     }
                     style={{ width: "100%", marginBottom: "10px" }}
                   >
@@ -100,15 +131,15 @@ return(
 
                    <input
                     type="text"
-                    value={marker.lisatiedot || ""}
-                    onChange={(e) => handleChange(idx, "lisatiedot", e.target.value)}
+                    value={newMarker.lisatiedot || ""}
+                    onChange={(e) => setNewMarker({...newMarker, lisatiedot: e.target.value})}
                     placeholder="Lisätietoja"
                     style={{ width: "100%", marginBottom: "10px" }}
                   />
 
 
                   <button
-                  onClick={() => saveMarker(marker, setMarkers)}
+                  onClick={() => saveMarker(newMarker, setMarkers)}
                   style={{
                     width: "100%",
                     padding: "8px",
