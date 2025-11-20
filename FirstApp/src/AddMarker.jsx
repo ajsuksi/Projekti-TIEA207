@@ -5,7 +5,7 @@ export default function MapClickHandler({onAddMarker }) {
   useMapEvents({
     click(e) {
       const newMarker = {
-        tyyppi: "parkkityyppi",
+        tyyppi: "",
         maksu: false,
         hinta: "",
         maksutapa: [],

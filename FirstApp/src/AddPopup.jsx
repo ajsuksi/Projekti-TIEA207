@@ -112,10 +112,10 @@ return(
                     style={{ width: "100%", marginBottom: "10px" }}
                   >
                     <option value="">Valitse tyyppi...</option>
-                    <option value="Kadunvarsi">Kadunvarsi</option>
-                    <option value="Pysäköintihalli">Pysäköintihalli</option>
-                    <option value="Parkkipaikka">Parkkipaikka</option>
-                    <option value="Muu">Muu</option>
+                    <option value="Kadunvarsi 🟢">Kadunvarsi</option>
+                    <option value="Pysäköintihalli 🔴">Pysäköintihalli</option>
+                    <option value="Parkkipaikka 🔵">Parkkipaikka</option>
+                    <option value="Mopoparkki 🟡">Mopoparkki</option>
                   </select>
 
                    <input

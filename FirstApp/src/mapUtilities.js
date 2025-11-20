@@ -28,6 +28,10 @@
     }
   };
 
+/**
+ * @param respose on vastays
+ * @returns mfeiow
+ */
   export const getMarkers = async () => {
   try {
     const response = await fetch("http://localhost:3001/api/places");
