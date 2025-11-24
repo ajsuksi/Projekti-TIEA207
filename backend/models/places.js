@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 //------Skeema-----
 
 const placeSchema = new mongoose.Schema({
+  osoite: {type: String, required: false},
   tyyppi: { type: String, required: true },
   maksu: { type: Boolean, required: false },
   hinta: {type: String, required: false},

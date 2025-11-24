@@ -32,9 +32,9 @@ return(
                   Osoite:
                   <input
                     type="text"
-                    value={marker.title}
-                    onChange={(e) => handleChange(idx, "title", e.target.value)}
-                    placeholder="Osoite"
+                    value={marker.osoite || ""}
+                    onChange={(e) => handleChange(idx, "osoite", e.target.value)}
+                    placeholder="osoite"
                     style={{ width: "100%", marginBottom: "5px" }}
                   />
                   
@@ -42,10 +42,10 @@ return(
                   <label>
                   <input
                     type="radio"
-                    name={`maksullinen-${idx}`}
+                    name={`maksu-${idx}`}
                     value="ilmainen"
-                    checked={marker.maksullinen === "ilmainen"}
-                    onChange={(e) => handleChange(idx, "maksullinen", e.target.value)}
+                    checked={marker.maksu === "ilmainen"}
+                    onChange={(e) => handleChange(idx, "maksu", e.target.value)}
                   />
                   {" "} Ilmainen
                   </label>
@@ -53,15 +53,15 @@ return(
                   <label>
                   <input
                     type="radio"
-                    name={`maksullinen-${idx}`}
-                    value="maksullinen"
-                    checked={marker.maksullinen === "maksullinen"}
-                    onChange={(e) => handleChange(idx, "maksullinen", e.target.value)}
+                    name={`maksu-${idx}`}
+                    value="maksu"
+                    checked={marker.maksu === "maksu"}
+                    onChange={(e) => handleChange(idx, "maksu", e.target.value)}
                   />
-                  {" "} Maksullinen
+                  {" "} maksu
                   </label>
 
-                  {marker.maksullinen === "maksullinen" && (
+                  {marker.maksu === "maksu" && (
                     <div>
                     <input
                     type="text"
@@ -75,13 +75,13 @@ return(
                       <label key={maksutapa} style={{ display: "block" }}>
                         <input
                           type="checkbox"
-                          checked={marker.maksutavat?.includes(maksutapa) || false}
+                          checked={marker.maksutapa?.includes(maksutapa) || false}
                           onChange={(e) => {
-                            const selected = marker.maksutavat || [];
+                            const selected = marker.maksutapa || [];
                             const updated = e.target.checked
                             ? [...selected, maksutapa]
                             : selected.filter((v) => v != maksutapa)
-                            handleChange(idx, "maksutavat", updated)
+                            handleChange(idx, "maksutapa", updated)
                           }}
                         />
                         {" "}{maksutapa}
@@ -92,7 +92,7 @@ return(
 
 
 
-                  {marker.maksullinen === "ilmainen" && (
+                  {marker.maksu === "ilmainen" && (
                     <input
                     type="text"
                     value={marker.aika || ""}
@@ -105,9 +105,9 @@ return(
 
 
                   <select
-                    value={marker.parkkityyppi || ""}
+                    value={marker.tyyppi || ""}
                     onChange={(e) =>
-                      handleChange(idx, "parkkityyppi", e.target.value)
+                      handleChange(idx, "tyyppi", e.target.value)
                     }
                     style={{ width: "100%", marginBottom: "10px" }}
                   >

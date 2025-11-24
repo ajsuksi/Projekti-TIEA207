@@ -2,6 +2,7 @@ export default function ViewPopup({ marker, onEdit, handleRemove }) {
   return (
     <div style={{ minWidth: "150px" }}>
       <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>{marker.tyyppi}</h4>
+        {marker.osoite && (<p>Osoite: {marker.osoite}</p>)}
         {marker.maksu !== undefined && (<p>{marker.maksu ? "Maksullinen" : "Ilmainen"}</p>)}
         {marker.hinta && (<p>Hinta: {marker.hinta}</p>)}
         {marker.maksutapa?.length > 0 && (<p>Maksutavat: {marker.maksutapa.join(", ")}</p>)}

@@ -1,10 +1,11 @@
  export const saveMarker = async (marker) => {
 
     const payload = {
-      tyyppi: marker.parkkityyppi,
-      maksu: marker.maksullinen === "maksullinen",
+      osoite: marker.osoite,
+      tyyppi: marker.tyyppi,
+      maksu: marker.maksu === "maksu",
       hinta:marker.hinta,
-      maksutapa: marker.maksutavat || [],
+      maksutapa: marker.maksutapa || [],
       aikarajoitus: marker.aika || null,
       sijainti: {
         lat: marker.lat,
@@ -29,8 +30,7 @@
   };
 
 /**
- * @param respose on vastays
- * @returns mfeiow
+ *palauttaa tietokannasta haetut paikat
  */
   export const getMarkers = async () => {
   try {

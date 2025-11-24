@@ -36,7 +36,7 @@ app.get("/api/places/:id", async (req, res) => {
 //Post method
 app.post("/api/places", async (request, response) => {
   try{
-   const { tyyppi, maksu, hinta, maksutapa, aikarajoitus, sijainti, lisatiedot } = request.body;
+   const { osoite, tyyppi, maksu, hinta, maksutapa, aikarajoitus, sijainti, lisatiedot } = request.body;
 
   // Tarkistetaan että pakolliset kentät on annettu
   if (!tyyppi || maksu === undefined) {
@@ -44,6 +44,7 @@ app.post("/api/places", async (request, response) => {
   }
 
     const place = new placesModel({
+      osoite,
       tyyppi,
       maksu,
       hinta,

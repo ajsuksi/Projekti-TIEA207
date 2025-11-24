@@ -5,6 +5,7 @@ export default function MapClickHandler({onAddMarker }) {
   useMapEvents({
     click(e) {
       const newMarker = {
+        osoite: "",
         tyyppi: "",
         maksu: false,
         hinta: "",
