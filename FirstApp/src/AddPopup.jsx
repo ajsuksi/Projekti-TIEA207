@@ -1,22 +1,59 @@
-import { saveMarker } from "./mapUtilities";
+import { saveMarker, updateMarker } from "./mapUtilities";
 import React, { useState } from "react";
 
 
 //PopUp lomakkeen hallinta
 export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice}){
+
+// Jos muokataan olemassa olevaa markeria, handleChange on handleEditingChange (2 param)
+// Jos luodaan uutta, handleChange on normaali (3 param)
+const callHandleChange = (field, value) => {
+  if (marker._id) {
+    handleChange(field, value);
+  } else {
+    handleChange(idx, field, value);
+  }
+};
+
 const handleSave = async () => {
     try {
-      const saved = await saveMarker(marker); // kutsutaan puhdasta utilia
+      // Puhdista turhat kentät maksullisuuden perusteella
+      let cleanedMarker = { ...marker };
+      if (cleanedMarker.maksu === false) {
+        // Ilmainen paikka: ei hintaa eikä maksutapoja
+        cleanedMarker.hinta = null;
+        cleanedMarker.maksutapa = [];
+      } else if (cleanedMarker.maksu === true) {
+        // Maksullinen paikka: ei aikarajoitusta
+        cleanedMarker.aikarajoitus = null;
+      }
 
-      // Päivitetään markerille backendin antama _id
-      setMarkers(prev =>
-        prev.map(m =>
-          m.lat === marker.lat && m.lng === marker.lng
-            ? { ...m, _id: saved._id }
-            : m
-        )
-      );
-      setNotice("Paikka tallennettu!");
+      let saved;
+      if (cleanedMarker._id) {
+        // Päivitetään olemassa oleva marker
+        saved = await updateMarker(cleanedMarker);
+        if (saved) {
+          setMarkers(prev =>
+            prev.map(m =>
+              m._id === cleanedMarker._id ? { ...cleanedMarker } : m
+            )
+          );
+          setNotice("Paikka päivitetty!");
+        }
+      } else {
+        // Tallennetaan uusi marker
+        saved = await saveMarker(cleanedMarker);
+
+        // Päivitetään markerille backendin antama _id
+        setMarkers(prev =>
+          prev.map(m =>
+            m.lat === cleanedMarker.lat && m.lng === cleanedMarker.lng
+              ? { ...m, _id: saved._id }
+              : m
+          )
+        );
+        setNotice("Paikka tallennettu!");
+      }
       setTimeout(() => setNotice(""), 4000);
     } catch (err) {
       setNotice("Tallennus epäonnistui");
@@ -27,13 +64,13 @@ return(
     <div style={{ position: "relative", minWidth: "150px" }}>
 
       <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>
-        Lisää parkkipaikka
+        {marker._id ? "Muokkaa parkkipaikkaa" : "Lisää parkkipaikka"}
       </h4>
                   Osoite:
                   <input
                     type="text"
                     value={marker.osoite || ""}
-                    onChange={(e) => handleChange(idx, "osoite", e.target.value)}
+                    onChange={(e) => callHandleChange("osoite", e.target.value)}
                     placeholder="osoite"
                     style={{ width: "100%", marginBottom: "5px" }}
                   />
@@ -43,9 +80,8 @@ return(
                   <input
                     type="radio"
                     name={`maksu-${idx}`}
-                    value="ilmainen"
-                    checked={marker.maksu === "ilmainen"}
-                    onChange={(e) => handleChange(idx, "maksu", e.target.value)}
+                    checked={marker.maksu === false}
+                    onChange={() => callHandleChange("maksu", false)}
                   />
                   {" "} Ilmainen
                   </label>
@@ -54,19 +90,18 @@ return(
                   <input
                     type="radio"
                     name={`maksu-${idx}`}
-                    value="maksu"
-                    checked={marker.maksu === "maksu"}
-                    onChange={(e) => handleChange(idx, "maksu", e.target.value)}
+                    checked={marker.maksu === true}
+                    onChange={() => callHandleChange("maksu", true)}
                   />
-                  {" "} maksu
+                  {" "} Maksullinen
                   </label>
 
-                  {marker.maksu === "maksu" && (
+                  {marker.maksu === true && (
                     <div>
                     <input
                     type="text"
                     value={marker.hinta || ""}
-                    onChange={(e) => handleChange(idx, "hinta", e.target.value)}
+                    onChange={(e) => callHandleChange("hinta", e.target.value)}
                     placeholder="Hinta"
                     rows={1}
                     style={{ width: "100%" }}
@@ -81,7 +116,7 @@ return(
                             const updated = e.target.checked
                             ? [...selected, maksutapa]
                             : selected.filter((v) => v != maksutapa)
-                            handleChange(idx, "maksutapa", updated)
+                            callHandleChange("maksutapa", updated)
                           }}
                         />
                         {" "}{maksutapa}
@@ -92,11 +127,11 @@ return(
 
 
 
-                  {marker.maksu === "ilmainen" && (
+                  {marker.maksu === false && (
                     <input
                     type="text"
-                    value={marker.aika || ""}
-                    onChange={(e) => handleChange(idx, "aika", e.target.value)}
+                    value={marker.aikarajoitus || marker.aika || ""}
+                    onChange={(e) => callHandleChange("aikarajoitus", e.target.value)}
                     placeholder="Aikarajoitus"
                     rows={1}
                     style={{ width: "100%", marginBottom: "10px"}}
@@ -107,7 +142,7 @@ return(
                   <select
                     value={marker.tyyppi || ""}
                     onChange={(e) =>
-                      handleChange(idx, "tyyppi", e.target.value)
+                      callHandleChange("tyyppi", e.target.value)
                     }
                     style={{ width: "100%", marginBottom: "10px" }}
                   >
@@ -121,7 +156,7 @@ return(
                    <input
                     type="text"
                     value={marker.lisatiedot || ""}
-                    onChange={(e) => handleChange(idx, "lisatiedot", e.target.value)}
+                    onChange={(e) => callHandleChange("lisatiedot", e.target.value)}
                     placeholder="Lisätietoja"
                     style={{ width: "100%", marginBottom: "10px" }}
                   />

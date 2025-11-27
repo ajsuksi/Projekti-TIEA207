@@ -14,6 +14,7 @@ import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
  const [notice, setNotice] = useState("");
+ const [editingMarker, setEditingMarker] = useState(null);
 
    const {
     filters,
@@ -42,7 +43,7 @@ export default function ParkingMap() {
             _id: p._id,
             osoite:p.osoite,
             tyyppi: p.tyyppi,
-            maksu: p.maksu,
+            maksu: !!p.maksu,
             hinta: p.hinta,
             maksutapa: p.maksutapa,
             aikarajoitus: p.aikarajoitus,
@@ -84,6 +85,21 @@ export default function ParkingMap() {
   const handleChange = (index, field, value) => {
     setMarkers((prev) =>
       prev.map((m, i) => (i === index ? { ...m, [field]: value } : m))
+    );
+  };
+
+  //Asettaa markerin muokkaustilaan
+  const handleEdit = (marker) => {
+    setEditingMarker(marker);
+  };
+
+  //Muokattavan markerin kenttien päivitys
+  const handleEditingChange = (field, value) => {
+    const updated = { ...editingMarker, [field]: value };
+    setEditingMarker(updated);
+    //Päivitä myös markers-tilaa, jotta muutokset säilyvät
+    setMarkers((prev) =>
+      prev.map((m) => m._id === updated._id ? updated : m)
     );
   };
 
@@ -132,9 +148,19 @@ export default function ParkingMap() {
                 : orangeMarker
               }            
               >
-                <Popup>  {marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
+                <Popup>  {editingMarker && editingMarker._id === marker._id ? (
+                    <MarkerPopup
+                    marker={editingMarker}
+                    idx={markers.findIndex(m => m._id === marker._id)}
+                    handleChange={handleEditingChange}
+                    handleRemove={handleRemove}
+                    setMarkers={setMarkers}
+                    setNotice={setNotice}
+                    />
+                  ) : marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
                     <ViewPopup 
                     marker={marker}
+                    onEdit={handleEdit}
                     handleRemove={handleRemove} />
                   ) :  (
                     <MarkerPopup

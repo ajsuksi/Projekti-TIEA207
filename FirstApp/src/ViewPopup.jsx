@@ -9,7 +9,7 @@ export default function ViewPopup({ marker, onEdit, handleRemove }) {
         {marker.aikarajoitus && (<p>Aikarajoitus: {marker.aikarajoitus}</p>)}
         {marker.lisatiedot && (<p>Lisätiedot: {marker.lisatiedot}</p>)}
       <button
-        onClick={() => onEdit(marker)}
+        onClick={(e) => {onEdit(marker); e.stopPropagation();}}
         style={{
           width: "100%",
           padding: "8px",

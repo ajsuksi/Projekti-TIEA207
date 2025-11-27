@@ -65,6 +65,44 @@ response.status(201).json(val);
  
 });
 
+// PUT method - Päivitä olemassa oleva paikka
+app.put("/api/places/:id", async (req, res) => {
+  try {
+    const id = req.params.id.trim();
+    const { osoite, tyyppi, maksu, hinta, maksutapa, aikarajoitus, sijainti, lisatiedot } = req.body;
+
+    // Tarkistetaan että pakolliset kentät on annettu
+    if (!tyyppi || maksu === undefined) {
+      return res.status(400).json({ error: "Puuttuvia kenttiä (tyyppi tai maksu)" });
+    }
+
+    const updated = await placesModel.findByIdAndUpdate(
+      id,
+      {
+        osoite,
+        tyyppi,
+        maksu,
+        hinta,
+        maksutapa,
+        aikarajoitus,
+        sijainti,
+        lisatiedot,
+      },
+      { new: true } // Palauta päivitetty dokumentti
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: "Paikkaa ei löytynyt" });
+    }
+
+    console.log("Paikka päivitetty onnistuneesti:", updated);
+    res.status(200).json(updated);
+  } catch (error) {
+    console.error("Virhe paikan päivityksessä:", error.message);
+    res.status(500).json({ error: "Paikan päivitys epäonnistui" });
+  }
+});
+
 app.delete("/api/places/:id", async (req, res) => {
   try {
     const id = req.params.id.trim();
