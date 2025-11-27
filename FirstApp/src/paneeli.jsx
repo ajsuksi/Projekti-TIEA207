@@ -40,7 +40,6 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         />
         Vain ilmaiset
       </label>
-      <br/>
       <label>
         <input
         type= "checkbox"
@@ -77,6 +76,14 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       ))}
       
       <p>Näytetään {filteredCount} paikkaa</p>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <p>Disclaimer:
+        Käyttö omalla vastuulla</p>
+
+
     </div>
   );
 };
