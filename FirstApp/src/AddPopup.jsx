@@ -1,77 +1,21 @@
-import { saveMarker, updateMarker } from "./mapUtilities";
-import React, { useState } from "react";
 import { useMap } from "react-leaflet";
+import {createCallHandleChange, createHandleSave} from "./popupHandlers";
 
 
 //PopUp lomakkeen hallinta
 export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice, onSave}){
 
-// Jos muokataan olemassa olevaa markeria, handleChange on handleEditingChange (2 param)
-// Jos luodaan uutta, handleChange on normaali (3 param)
-const callHandleChange = (field, value) => {
-  if (marker._id) {
-    handleChange(field, value);
-  } else {
-    handleChange(idx, field, value);
-  }
-};
+ const map = useMap();
+ const getMarker = () => marker;
+ const callHandleChange = createCallHandleChange(getMarker, idx, handleChange);
+ const handleSave = createHandleSave({
+    getMarker,
+    setMarkers,
+    setNotice,
+    onSave,
+    map
+  });
 
-// Leafletin map-instanssi, käytetään popupin sulkemiseen tallennuksen jälkeen
-const map = useMap();
-
-const handleSave = async () => {
-    try {
-      // Puhdista turhat kentät maksullisuuden perusteella
-      let cleanedMarker = { ...marker };
-      if (cleanedMarker.maksu === false) {
-        // Ilmainen paikka: ei hintaa eikä maksutapoja
-        cleanedMarker.hinta = null;
-        cleanedMarker.maksutapa = [];
-      } else if (cleanedMarker.maksu === true) {
-        // Maksullinen paikka: ei aikarajoitusta
-        cleanedMarker.aikarajoitus = null;
-      }
-
-      let saved;
-      if (cleanedMarker._id) {
-        // Päivitetään olemassa oleva marker
-        saved = await updateMarker(cleanedMarker);
-        if (saved) {
-          setMarkers(prev =>
-            prev.map(m =>
-              m._id === cleanedMarker._id ? { ...cleanedMarker } : m
-            )
-          );
-          // Sulje popup kartalta ennen että ViewPopup ei ilmesty
-          try { map.closePopup(); } catch (e) {}
-          // Sulje muokkaustila kartalla
-          if (typeof onSave === "function") onSave();
-          setNotice("Paikka päivitetty!");
-        }
-      } else {
-        // Tallennetaan uusi marker
-        saved = await saveMarker(cleanedMarker);
-
-        // Päivitetään markerille backendin antama _id
-        setMarkers(prev =>
-          prev.map(m =>
-            m.lat === cleanedMarker.lat && m.lng === cleanedMarker.lng
-              ? { ...m, _id: saved._id }
-              : m
-          )
-        );
-        // Sulje popup kartalta ennen että ViewPopup ei ilmesty
-        try { map.closePopup(); } catch (e) {}
-        // Sulje muokkaustila kartalla (uusi paikka sai _id)
-        if (typeof onSave === "function") onSave();
-        setNotice("Paikka tallennettu!");
-      }
-      setTimeout(() => setNotice(""), 4000);
-    } catch (err) {
-      setNotice("Tallennus epäonnistui");
-      setTimeout(() => setNotice(""), 5000);
-    }
-  };
 return(
     <div style={{ position: "relative", minWidth: "150px" }}>
 
