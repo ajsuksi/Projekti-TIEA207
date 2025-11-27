@@ -9,12 +9,14 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         left: 0,
         top: 0,
         height: "100vh",
-        borderRight: "1px solid #ccc",
+        borderRight: "1px solid #ffffffff",
         padding: "1rem",
         transform: "translateX(-9vw)", 
         transition: "transform 0.3s ease-in-out",
-        backgroundColor: "#141313ff",
-        color: "White",
+        backgroundColor: "#ffffffff",
+        color: "Black",
+        display: "flex",
+        flexDirection: "column",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateX(0)"; // Näytetään paneeli
@@ -23,7 +25,10 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         e.currentTarget.style.transform = "translateX(-12vw)"; // Piilotetaan paneeli
       }}
     >
-      <h3>Parkkipaikat</h3>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        <h3>Parkkipaikat</h3>
+        <img src="/src/icons/logo.png" alt="logo" style={{ height: "2rem", width: "auto" }} />
+      </div>
       <h4>Rajaa paikkoja:</h4>
       
       {/* Maksullisuus*/}
