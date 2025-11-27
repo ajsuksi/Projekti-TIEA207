@@ -1,9 +1,10 @@
 import { saveMarker, updateMarker } from "./mapUtilities";
 import React, { useState } from "react";
+import { useMap } from "react-leaflet";
 
 
 //PopUp lomakkeen hallinta
-export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice}){
+export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice, onSave}){
 
 // Jos muokataan olemassa olevaa markeria, handleChange on handleEditingChange (2 param)
 // Jos luodaan uutta, handleChange on normaali (3 param)
@@ -14,6 +15,9 @@ const callHandleChange = (field, value) => {
     handleChange(idx, field, value);
   }
 };
+
+// Leafletin map-instanssi, käytetään popupin sulkemiseen tallennuksen jälkeen
+const map = useMap();
 
 const handleSave = async () => {
     try {
@@ -38,6 +42,10 @@ const handleSave = async () => {
               m._id === cleanedMarker._id ? { ...cleanedMarker } : m
             )
           );
+          // Sulje popup kartalta ennen että ViewPopup ei ilmesty
+          try { map.closePopup(); } catch (e) {}
+          // Sulje muokkaustila kartalla
+          if (typeof onSave === "function") onSave();
           setNotice("Paikka päivitetty!");
         }
       } else {
@@ -52,6 +60,10 @@ const handleSave = async () => {
               : m
           )
         );
+        // Sulje popup kartalta ennen että ViewPopup ei ilmesty
+        try { map.closePopup(); } catch (e) {}
+        // Sulje muokkaustila kartalla (uusi paikka sai _id)
+        if (typeof onSave === "function") onSave();
         setNotice("Paikka tallennettu!");
       }
       setTimeout(() => setNotice(""), 4000);
@@ -163,7 +175,7 @@ return(
 
 
                   <button
-                  onClick={() => handleSave()}
+                  onClick={(e) => { e.stopPropagation(); handleSave(); }}
                   style={{
                     width: "100%",
                     padding: "8px",

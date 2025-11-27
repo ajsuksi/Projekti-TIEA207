@@ -156,6 +156,7 @@ export default function ParkingMap() {
                     handleRemove={handleRemove}
                     setMarkers={setMarkers}
                     setNotice={setNotice}
+                    onSave={() => setEditingMarker(null)}
                     />
                   ) : marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
                     <ViewPopup 
