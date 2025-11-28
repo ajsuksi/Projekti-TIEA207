@@ -1,9 +1,11 @@
 import {useMapEvents} from "react-leaflet";
 
 //Lisää markerin
-export default function MapClickHandler({onAddMarker }) {
+const MapClickHandler = ({ onAddMarker, isDisabled }) => {
   useMapEvents({
     click(e) {
+      if (isDisabled) return; // Poista käytöstä kun väliaikainen merkki olemassa
+
       const newMarker = {
         osoite: "",
         tyyppi: "",
@@ -18,5 +20,8 @@ export default function MapClickHandler({onAddMarker }) {
       onAddMarker(newMarker);
     },
   });
+
   return null;
-}
+};
+
+export default MapClickHandler;
