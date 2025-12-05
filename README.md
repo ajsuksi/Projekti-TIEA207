@@ -13,19 +13,29 @@ CSS / HTML
 Node.js must be installed on your pc
 
 1. Clone the repository:
+ ```
  git clone <repository-url>
-
+ ```
 2. Navigate to the project folder:
+ ```
  cd projekti-TIEA207
-
+ ```
 3.Install dependencies:
+ ```
  npm install
-
+ ```
 4. Start the servers:
-   in frontend: npm start run dev
-   in backend: npm start
-
+ in frontend:
+ ```
+npm start run dev
+```
+in backend:
+ ```
+ npm start
+ ```
 5. Open the app in your browser:
+```
 http://localhost5173 (or other)
-   
+```   
+
 
