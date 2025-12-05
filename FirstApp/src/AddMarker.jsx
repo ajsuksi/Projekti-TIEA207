@@ -11,7 +11,7 @@ const MapClickHandler = ({ onAddMarker, isDisabled }) => {
       if (onWater) {
         alert("Et voi lisätä paikkaa veteen.");
         return;
-        )
+      }
       
 
       const newMarker = {
