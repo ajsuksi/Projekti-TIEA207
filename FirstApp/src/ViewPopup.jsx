@@ -1,4 +1,4 @@
-export default function ViewPopup({ marker, onEdit, handleRemove }) {
+export default function ViewPopup({ marker, onEdit, handleRemove, setRouteDestination }) {
   return (
     <div style={{ minWidth: "150px" }}>
       <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>{marker.tyyppi}</h4>
@@ -20,6 +20,22 @@ export default function ViewPopup({ marker, onEdit, handleRemove }) {
         }}
         >
         Muokkaa
+      </button>
+
+      <button
+        onClick={() => setRouteDestination([marker.lat, marker.lng])}
+        style={{
+          width: "100%",
+          padding: "8px",
+          marginTop: "10px",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        Navigoi
       </button>
       
       <button
