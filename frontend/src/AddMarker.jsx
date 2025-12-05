@@ -5,13 +5,13 @@ import { isWater } from "./isItWater";
 const MapClickHandler = ({ onAddMarker, isDisabled }) => {
   useMapEvents({
    async click(e) {
-      if (isDisabled) return // Poista käytöstä kun väliaikainen merkki olemassa
+      if (isDisabled) return; // Poista käytöstä kun väliaikainen merkki olemassa
       // Tarkista ennen markerin lisäämistä
       const onWater = await isWater(e.latlng.lat, e.latlng.lng);
       if (onWater) {
         alert("Et voi lisätä paikkaa veteen.");
         return;
-        )
+      }
       
 
       const newMarker = {
@@ -27,7 +27,7 @@ const MapClickHandler = ({ onAddMarker, isDisabled }) => {
       };
       onAddMarker(newMarker);
     },
-  });
+});
 
   return null;
 };
