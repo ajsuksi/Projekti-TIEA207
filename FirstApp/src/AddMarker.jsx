@@ -1,10 +1,18 @@
 import {useMapEvents} from "react-leaflet";
+import { isWater } from "./isItWater";
 
 //Lisää markerin
 const MapClickHandler = ({ onAddMarker, isDisabled }) => {
   useMapEvents({
-    click(e) {
-      if (isDisabled) return; // Poista käytöstä kun väliaikainen merkki olemassa
+   async click(e) {
+      if (isDisabled) return // Poista käytöstä kun väliaikainen merkki olemassa
+      // Tarkista ennen markerin lisäämistä
+      const onWater = await isWater(e.latlng.lat, e.latlng.lng);
+      if (onWater) {
+        alert("Et voi lisätä paikkaa veteen.");
+        return;
+        )
+      
 
       const newMarker = {
         osoite: "",
