@@ -2,16 +2,17 @@ import {useMapEvents} from "react-leaflet";
 import { isWater } from "./isItWater";
 
 //Lisää markerin
-export default function MapClickHandler({onAddMarker }) {
-  
+const MapClickHandler = ({ onAddMarker, isDisabled }) => {
   useMapEvents({
-    async click(e) {
+   async click(e) {
+      if (isDisabled) return // Poista käytöstä kun väliaikainen merkki olemassa
       // Tarkista ennen markerin lisäämistä
       const onWater = await isWater(e.latlng.lat, e.latlng.lng);
       if (onWater) {
         alert("Et voi lisätä paikkaa veteen.");
         return;
-      }
+        )
+      
 
       const newMarker = {
         osoite: "",
@@ -27,5 +28,8 @@ export default function MapClickHandler({onAddMarker }) {
       onAddMarker(newMarker);
     },
   });
+
   return null;
-}
+};
+
+export default MapClickHandler;

@@ -9,14 +9,19 @@ import ViewPopup from "./ViewPopup";
 import {useFilterMarkers } from "./filterMarkers"
 import Ilmoitus from "./ilmoitus";
 import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
+import { RoutingMachine } from "./routing";
+import { useUserLocation } from "./UserLocation";
+
 
 
 export default function ParkingMap() {
  const [markers, setMarkers] = useState([]);
  const [notice, setNotice] = useState("");
  const [editingMarker, setEditingMarker] = useState(null);
+ const [routeDestination, setRouteDestination] = useState(null);
+ const { userLocation } = useUserLocation();
 
-   const {
+ const {
     filters,
     handleFreeChange,
     handleTypeChange,
@@ -26,6 +31,7 @@ export default function ParkingMap() {
     handlePaymentMethodChange,
     availablePaymentMethods
   } = useFilterMarkers(markers);
+
 
  //Hakee paikat ja muuttaa ne sopivaan muotoon
   useEffect(() => {
@@ -63,9 +69,10 @@ export default function ParkingMap() {
   //Poistaa markerin
   const handleRemove = async (markerId) => {
     if (!markerId) {
-      console.error("Marker id puuttuu");
+      setMarkers((prev) => prev.filter((m) => m._id !== markerId));
       return;
     }
+    
     if (window.confirm("Haluatko varmasti poistaa parkkipaikan?")){      
       try {
         const response = await fetch(`http://localhost:3001/api/places/${markerId}`, {
@@ -129,10 +136,19 @@ export default function ParkingMap() {
           style={{ height: "100%", width: "100%", zIndex: 1 }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+          {/*Routing machine navigointia varten*/}
+          <RoutingMachine
+          userLocation={userLocation}
+          routeDestination={routeDestination}
+          />
+
  
           <MapClickHandler onAddMarker={(newMarker) => 
             setMarkers((prev) => [...prev, newMarker])
-          } />
+          } 
+          isDisabled={markers.some(m => !m._id)}
+          />
 
           {filteredPlaces.map((marker, idx) => (
             <Marker
@@ -162,7 +178,9 @@ export default function ParkingMap() {
                     <ViewPopup 
                     marker={marker}
                     onEdit={handleEdit}
-                    handleRemove={handleRemove} />
+                    handleRemove={handleRemove}
+                    setRouteDestination={setRouteDestination}
+                    />
                   ) :  (
                     <MarkerPopup
                     marker={marker}
