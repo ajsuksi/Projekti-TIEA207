@@ -95,3 +95,4 @@ export const updateMarker = async (marker) => {
     return [];
   }
 };
+
