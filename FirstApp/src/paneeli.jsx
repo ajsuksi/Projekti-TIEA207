@@ -5,29 +5,28 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       style={{
         position: "absolute",
         zIndex: 1000,
-        width: "15vw",
+        width: "15rem",
         left: 0,
         top: 0,
         height: "100vh",
-        borderRight: "1px solid #ffffffff",
-        padding: "1rem",
-        transform: "translateX(-9vw)", 
+        paddingLeft: "1rem",
+        transform: "translateX(-11rem)", 
         transition: "transform 0.3s ease-in-out",
         backgroundColor: "#ffffffff",
         color: "Black",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateX(0)"; // Näytetään paneeli
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateX(-12vw)"; // Piilotetaan paneeli
+        e.currentTarget.style.transform = "translateX(-11rem)"; // Piilotetaan paneeli
       }}
     >
+      <div style={{display:"flex", flexDirection:"column"}}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         <h3>Parkkipaikat</h3>
-        <img src="/src/icons/logo.png" alt="logo" style={{ height: "2rem", width: "auto" }} />
       </div>
       <h4>Rajaa paikkoja:</h4>
       
@@ -63,7 +62,7 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       ))}
 
       {/* Maksutapa */}
-      <h4>Maksutapa</h4>
+        <h4>Maksutapa</h4>
       {availablePayments.map(method => (
         <label key={method} style={{ display: 'block' }}>
           <input
@@ -76,14 +75,15 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       ))}
       
       <p>Näytetään {filteredCount} paikkaa</p>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <p>Disclaimer:
+      <p style={{marginTop: "auto", fontSize: "0.8rem", color: "#555", paddingBottom: "1rem"}}>Disclaimer:<br/>
         Käyttö omalla vastuulla</p>
-
-
+    </div>
+    <div style={{ width: "4rem", display: "flex", flexDirection: "column", marginLeft: "auto"}}>
+      <img src="/src/icons/logo.png" alt="logo" style={{ height: "5rem", width: "auto", alignSelf: "center", paddingRight: "1rem"}} />
+      <div style={{flex: 1, display: "flex", justifyContent: "center", alignItems: "center", paddingRight: "1rem", marginBottom: "5rem"}}>
+        <img src="/src/icons/burger.png" alt="burger" style={{ height: "3rem", width: "3rem" }} />
+      </div>
+    </div>
     </div>
   );
 };
