@@ -63,9 +63,10 @@ export default function ParkingMap() {
   //Poistaa markerin
   const handleRemove = async (markerId) => {
     if (!markerId) {
-      console.error("Marker id puuttuu");
+      setMarkers((prev) => prev.filter((m) => m._id !== markerId));
       return;
     }
+    
     if (window.confirm("Haluatko varmasti poistaa parkkipaikan?")){      
       try {
         const response = await fetch(`http://localhost:3001/api/places/${markerId}`, {
@@ -132,7 +133,9 @@ export default function ParkingMap() {
  
           <MapClickHandler onAddMarker={(newMarker) => 
             setMarkers((prev) => [...prev, newMarker])
-          } />
+          } 
+          isDisabled={markers.some(m => !m._id)}
+          />
 
           {filteredPlaces.map((marker, idx) => (
             <Marker
