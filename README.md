@@ -25,6 +25,7 @@ Node.js must be installed on your pc
  npm install
  ```
 4. Start the servers:
+
  in frontend:
  ```
 npm start run dev
@@ -37,5 +38,6 @@ in backend:
 ```
 http://localhost5173 (or other)
 ```   
+
 
 
