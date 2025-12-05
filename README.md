@@ -1,6 +1,6 @@
 ﻿# Projekti-TIEA207
 
-This project is a React-based parking application. The app allows users to find and add new parking spots on map. User can add information like: address, payment(free or not) payment method and additional information if needed. Users can so find parking spots easily and navigate to them. 
+This project is a React-based parking application. The app allows users to find and add new parking spots on map. User can add information like: address, payment (free or not) payment method and additional information if needed. Users can so find parking spots easily and navigate to them. 
 
 # 🚀 Technologies
 React
@@ -38,6 +38,7 @@ in backend:
 ```
 http://localhost5173 (or other)
 ```   
+
 
 
 
