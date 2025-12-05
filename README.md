@@ -2,14 +2,14 @@
 
 This project is a React-based parking application. The app allows users to find and add new parking spots on map. User can add information like: address, payment(frre or not) payment method and additional information if needed. Users can so find parking spots easily and navigate to them. 
 
-#🚀 Technologies
+# 🚀 Technologies
 React
 JavaScript
 Vite (development/build tool)
 Node.js (runtime environment)
 CSS / HTML
 
-#⚙️Installation
+# ⚙️Installation
 Node.js must be installed on your pc
 
 1. Clone the repository:
@@ -28,3 +28,4 @@ Node.js must be installed on your pc
 5. Open the app in your browser:
 http://localhost5173 (or other)
    
+
