@@ -14,7 +14,7 @@ import { useUserLocation } from "./UserLocation";
 
 
 
-export default function ParkingMap() {
+export default function ParkingMap({ darkMode, setDarkMode }) {
  const [markers, setMarkers] = useState([]);
  const [notice, setNotice] = useState("");
  const [editingMarker, setEditingMarker] = useState(null);
@@ -126,6 +126,8 @@ export default function ParkingMap() {
     onPaymentMethodChange={handlePaymentMethodChange}
     availablePayments={availablePaymentMethods}
     filteredCount={filteredPlaces.length}
+    darkMode={darkMode}
+    setDarkMode={setDarkMode}
     />
 
       {/* Kartta oikealle puolelle */}
@@ -173,6 +175,7 @@ export default function ParkingMap() {
                     setMarkers={setMarkers}
                     setNotice={setNotice}
                     onSave={() => setEditingMarker(null)}
+                    darkMode={darkMode}
                     />
                   ) : marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
                     <ViewPopup 
@@ -180,6 +183,7 @@ export default function ParkingMap() {
                     onEdit={handleEdit}
                     handleRemove={handleRemove}
                     setRouteDestination={setRouteDestination}
+                    darkMode={darkMode}
                     />
                   ) :  (
                     <MarkerPopup
@@ -189,6 +193,7 @@ export default function ParkingMap() {
                     handleRemove={handleRemove}
                     setMarkers={setMarkers}
                     setNotice={setNotice}
+                    darkMode={darkMode}
                     />
                   )}
                 </Popup>

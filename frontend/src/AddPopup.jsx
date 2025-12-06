@@ -1,9 +1,10 @@
 import { useMap } from "react-leaflet";
 import {createCallHandleChange, createHandleSave} from "./popupHandlers";
+import { popupStyle, inputStyle, labelStyle, headingStyle, buttonStyle } from "./popupStyles";
 
 
 //PopUp lomakkeen hallinta
-export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice, onSave}){
+export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice, onSave, darkMode}){
 
  const map = useMap();
  const getMarker = () => marker;
@@ -17,22 +18,22 @@ export default function MarkerPopup ({marker, idx, handleChange, handleRemove, s
   });
 
 return(
-    <div style={{ position: "relative", minWidth: "150px" }}>
+    <div style={popupStyle(darkMode)}>
 
-      <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>
+      <h4 style={headingStyle(darkMode)}>
         {marker._id ? "Muokkaa parkkipaikkaa" : "Lisää parkkipaikka"}
       </h4>
-                  Osoite:
+                  <label style={labelStyle(darkMode)}>Osoite:</label>
                   <input
                     type="text"
                     value={marker.osoite || ""}
                     onChange={(e) => callHandleChange("osoite", e.target.value)}
                     placeholder="osoite"
-                    style={{ width: "100%", marginBottom: "5px" }}
+                    style={{ ...inputStyle(darkMode), marginBottom: "5px" }}
                   />
                   
 
-                  <label>
+                  <label style={labelStyle(darkMode)}>
                   <input
                     type="radio"
                     name={`maksu-${idx}`}
@@ -42,7 +43,7 @@ return(
                   {" "} Ilmainen
                   </label>
 
-                  <label>
+                  <label style={labelStyle(darkMode)}>
                   <input
                     type="radio"
                     name={`maksu-${idx}`}
@@ -60,10 +61,10 @@ return(
                     onChange={(e) => callHandleChange("hinta", e.target.value)}
                     placeholder="Hinta"
                     rows={1}
-                    style={{ width: "100%" }}
+                    style={{ ...inputStyle(darkMode), marginBottom: "8px" }}
                     />
                     {["Kortti", "Käteinen", "Moovy"].map((maksutapa) => (
-                      <label key={maksutapa} style={{ display: "block" }}>
+                      <label key={maksutapa} style={labelStyle(darkMode)}>
                         <input
                           type="checkbox"
                           checked={marker.maksutapa?.includes(maksutapa) || false}
@@ -90,7 +91,7 @@ return(
                     onChange={(e) => callHandleChange("aikarajoitus", e.target.value)}
                     placeholder="Aikarajoitus"
                     rows={1}
-                    style={{ width: "100%", marginBottom: "10px"}}
+                    style={{ ...inputStyle(darkMode), marginBottom: "10px"}}
                   />
                   )}
 
@@ -100,7 +101,7 @@ return(
                     onChange={(e) =>
                       callHandleChange("tyyppi", e.target.value)
                     }
-                    style={{ width: "100%", marginBottom: "10px" }}
+                    style={{ ...inputStyle(darkMode), marginBottom: "10px" }}
                   >
                     <option value="">Valitse tyyppi...</option>
                     <option value="Kadunvarsi 🟢">Kadunvarsi</option>
@@ -114,20 +115,13 @@ return(
                     value={marker.lisatiedot || ""}
                     onChange={(e) => callHandleChange("lisatiedot", e.target.value)}
                     placeholder="Lisätietoja"
-                    style={{ width: "100%", marginBottom: "10px" }}
+                    style={{ ...inputStyle(darkMode), marginBottom: "10px" }}
                   />
 
 
                   <button
                   onClick={(e) => { e.stopPropagation(); handleSave(); }}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    backgroundColor: "#24af2eff",
-                    color: "#1d1b1bff",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
+                  style={buttonStyle.save}
                   >
                     Tallenna
                   </button>
@@ -138,15 +132,7 @@ return(
                     console.log("Poistetaan marker:", marker._id);
                     handleRemove(marker._id);
                   }}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    marginTop: "3px",
-                    backgroundColor: "#da4e4eff",
-                    color: "#000000ff",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
+                  style={buttonStyle.delete}
                   >
                     Poista
                   </button>

@@ -1,39 +1,25 @@
-export default function ViewPopup({ marker, onEdit, handleRemove, setRouteDestination }) {
+import { popupStyle, headingStyle, buttonStyle, textStyle } from "./popupStyles";
+
+export default function ViewPopup({ marker, onEdit, handleRemove, setRouteDestination, darkMode }) {
   return (
-    <div style={{ minWidth: "150px" }}>
-      <h4 style={{ marginTop: 0, marginBottom: "8px", fontSize: "16px" }}>{marker.tyyppi}</h4>
-        {marker.osoite && (<p>Osoite: {marker.osoite}</p>)}
-        {marker.maksu !== undefined && (<p>{marker.maksu ? "Maksullinen" : "Ilmainen"}</p>)}
-        {marker.hinta && (<p>Hinta: {marker.hinta}</p>)}
-        {marker.maksutapa?.length > 0 && (<p>Maksutavat: {marker.maksutapa.join(", ")}</p>)}
-        {marker.aikarajoitus && (<p>Aikarajoitus: {marker.aikarajoitus}</p>)}
-        {marker.lisatiedot && (<p>Lisätiedot: {marker.lisatiedot}</p>)}
+    <div style={popupStyle(darkMode)}>
+      <h4 style={headingStyle(darkMode)}>{marker.tyyppi}</h4>
+        {marker.osoite && (<p style={textStyle(darkMode)}>Osoite: {marker.osoite}</p>)}
+        {marker.maksu !== undefined && (<p style={textStyle(darkMode)}>{marker.maksu ? "Maksullinen" : "Ilmainen"}</p>)}
+        {marker.hinta && (<p style={textStyle(darkMode)}>Hinta: {marker.hinta}</p>)}
+        {marker.maksutapa?.length > 0 && (<p style={textStyle(darkMode)}>Maksutavat: {marker.maksutapa.join(", ")}</p>)}
+        {marker.aikarajoitus && (<p style={textStyle(darkMode)}>Aikarajoitus: {marker.aikarajoitus}</p>)}
+        {marker.lisatiedot && (<p style={textStyle(darkMode)}>Lisätiedot: {marker.lisatiedot}</p>)}
       <button
         onClick={(e) => {onEdit(marker); e.stopPropagation();}}
-        style={{
-          width: "100%",
-          padding: "8px",
-          backgroundColor: "#BDAEA3",
-          color: "black",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
+        style={buttonStyle.edit(darkMode)}
         >
         Muokkaa
       </button>
 
       <button
         onClick={() => setRouteDestination([marker.lat, marker.lng])}
-        style={{
-          width: "100%",
-          padding: "8px",
-          marginTop: "10px",
-          backgroundColor: "#007bff",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
+        style={buttonStyle.navigate}
       >
         Navigoi
       </button>
@@ -44,15 +30,7 @@ export default function ViewPopup({ marker, onEdit, handleRemove, setRouteDestin
                     console.log("Poistetaan marker:", marker._id);
                     handleRemove(marker._id);
                   }}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    marginTop: "3px",
-                    backgroundColor: "#da4e4eff",
-                    color: "#000000ff",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
+                  style={buttonStyle.delete}
                   >
                     Poista
                   </button>

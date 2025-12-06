@@ -17,7 +17,7 @@ export default function SplashScreen({ onFinish }) {
       zIndex: 9999
     }}>
       <img
-        src="/src/icons/logo.png"
+        src="/src/icons/logo2.png"
         alt="Parkkisovellus"
         style={{ width: "180px", opacity: 1 }}
       />

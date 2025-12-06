@@ -7,11 +7,11 @@ const MapClickHandler = ({ onAddMarker, isDisabled }) => {
    async click(e) {
       if (isDisabled) return; // Poista käytöstä kun väliaikainen merkki olemassa
       // Tarkista ennen markerin lisäämistä
-      const onWater = await isWater(e.latlng.lat, e.latlng.lng);
+/*       const onWater = await isWater(e.latlng.lat, e.latlng.lng);
       if (onWater) {
         alert("Et voi lisätä paikkaa veteen.");
         return;
-      }
+      } */
       
 
       const newMarker = {
