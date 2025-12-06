@@ -11,6 +11,8 @@ import Ilmoitus from "./ilmoitus";
 import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
 import { RoutingMachine } from "./routing";
 import { useUserLocation } from "./UserLocation";
+import InfoButton from "./InfoButton";
+import ChatButton from "./ChatButton";
 
 
 
@@ -201,6 +203,10 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
           ))}
         </MapContainer>
       </div>
+      
+      {/* Info-painike ja chat-painike oikeaan alareunaan */}
+      <ChatButton darkMode={darkMode} />
+      <InfoButton darkMode={darkMode} />
     </div>
   );
 }

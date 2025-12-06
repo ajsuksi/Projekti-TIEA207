@@ -95,9 +95,9 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         Käyttö omalla vastuulla</p>
     </div>
     <div style={{ width: "4rem", display: "flex", flexDirection: "column", marginLeft: "auto"}}>
-      {darkMode ? <img src="/src/icons/logo2_dark.png" alt="logo_dark" style={{ height: "4rem", width: "auto", alignSelf: "center", paddingRight: "1rem", paddingTop: "1rem"}} /> : <img src="/src/icons/logo2.png" alt="logo" style={{ height: "4rem", width: "auto", alignSelf: "center", paddingRight: "1rem", paddingTop: "1rem"}} /> }
+      {darkMode ? <img src="/src/icons/logo_dark.svg" alt="logo_dark" style={{ height: "5rem", width: "auto", alignSelf: "center", paddingRight: "1rem", paddingTop: "1rem"}} /> : <img src="/src/icons/logo.svg" alt="logo" style={{ height: "5rem", width: "auto", alignSelf: "center", paddingRight: "1rem", paddingTop: "1rem"}} /> }
       <div style={{flex: 1, display: "flex", justifyContent: "center", alignItems: "center", paddingRight: "1rem", marginBottom: "5rem"}}>
-        {darkMode ? <img src="/src/icons/burger_dark.png" alt="burger_dark" style={{ height: "3rem", width: "3rem" }} /> : <img src="/src/icons/burger.png" alt="burger" style={{ height: "3rem", width: "3rem" }} />}
+        {darkMode ? <img src="/src/icons/burger_dark.svg" alt="burger_dark" style={{ height: "3rem", width: "3rem" }} /> : <img src="/src/icons/burger.svg" alt="burger" style={{ height: "3rem", width: "3rem" }} />}
       </div>
     </div>
     </div>
