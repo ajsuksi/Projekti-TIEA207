@@ -11,6 +11,7 @@ import Ilmoitus from "./ilmoitus";
 import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
 import { RoutingMachine } from "./routing";
 import { useUserLocation } from "./UserLocation";
+import ExitNavigationButton  from "./ExitNavigation";
 
 
 
@@ -41,9 +42,6 @@ export default function ParkingMap() {
           const lat = p.sijainti?.lat ?? p.lat ?? null;
           const lng = p.sijainti?.lng ?? p.lng ?? null;
 
-          // jos lat/lng ei ole numero, palauta null 
-          if (typeof lat !== "number" || typeof lng !== "number") return null;
-
           return {
 
             _id: p._id,
@@ -59,7 +57,7 @@ export default function ParkingMap() {
             isFree: !p.maksu,  
           };
         })
-        .filter(Boolean); // poistaa kaikki null-arvot
+        .filter(Boolean); 
       setMarkers(normalized);
     };
 
@@ -115,6 +113,10 @@ export default function ParkingMap() {
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
       
       <Ilmoitus message={notice}/>
+
+    {/* Poistuminen navigoinnista*/}
+    {routeDestination && (
+   <ExitNavigationButton onExit={() => setRouteDestination(null)} />)}
 
       {/* Vasen paneeli */}
     <Paneeli 
