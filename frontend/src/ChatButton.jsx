@@ -1,13 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+// Tähän saa laittaa esimerkkiviestejä jos haluaa
+  const viesti1 = {
+          id: Date.now(),
+          username: "Tietäjä",
+          text: "Vaasankadulla on tänään ruuhkaa tosi runsaasti",
+          timestamp: new Date(new Date().getTime() - 2 * 60 * 60000).toLocaleTimeString("fi-FI", {
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        }
+  const viesti2 = {
+          id: Date.now()+1,
+          username: "skeletondeathkillersniper666",
+          text: "Ok.",
+          timestamp: new Date(new Date().getTime() - 60 * 60000).toLocaleTimeString("fi-FI", {
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        }
 
 export default function ChatButton({ darkMode }) {
   const [showChat, setShowChat] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([viesti1, viesti2]);
   const [username, setUsername] = useState("Vierailija");
   const [messageText, setMessageText] = useState("");
+  const messagesEndRef = useRef(null);
+
+  // Chat vierittyy automaattisesti alas kun lähettää uuden viestin
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const buttonStyle = {
     position: "fixed",
+    marginRight: "1rem",
     bottom: "20px",
     right: "80px",
     width: "50px",
@@ -31,8 +58,8 @@ export default function ChatButton({ darkMode }) {
     position: "fixed",
     bottom: "80px",
     right: "20px",
-    width: "300px",
-    height: "400px",
+    width: "20rem",
+    height: "40rem",
     backgroundColor: darkMode ? "#2d2d2d" : "#ffffff",
     border: darkMode ? "1px solid #444444" : "1px solid #888",
     borderRadius: "8px",
@@ -143,7 +170,7 @@ export default function ChatButton({ darkMode }) {
         onClick={() => setShowChat(!showChat)}
         title="Chat"
       >
-        💬
+        <img src="/src/icons/chat.png" alt="chat" style={{ height: "2rem", width: "auto"}} />
       </button>
 
       <div style={chatWindowStyle}>
@@ -179,6 +206,7 @@ export default function ChatButton({ darkMode }) {
               </div>
             ))
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         <div style={inputContainerStyle}>

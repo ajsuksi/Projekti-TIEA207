@@ -60,7 +60,7 @@ export default function InfoButton({ darkMode }) {
   return (
     <>
       <button style={buttonStyle} onClick={() => setShowInfo(true)} title="Tietoa ohjelmasta">
-        ℹ️
+        <img src="/src/icons/info.png" alt="info" style={{ height: "2rem", width: "auto"}} />
       </button>
 
       <div style={modalStyle} onClick={() => setShowInfo(false)}>
@@ -73,13 +73,13 @@ export default function InfoButton({ darkMode }) {
           </button>
           <h2 style={{ marginTop: "0" }}>Tietoa ohjelmasta</h2>
           <p>
-            <strong>Parkkisovellus</strong> auttaa käyttäjiä löytämään heille sopivia parkkipaikkoja kaupungissa. Käyttäjät voivat lisätä, muokata ja poistaa parkkipaikkoja kartalta. Lisäksi parkkipaikkoja voi suodattaa tyypin, maksullisuuden ja maksutapojen perusteella.
+            <strong>Parkkisovellus</strong> auttaa käyttäjiä löytämään heille sopivia parkkipaikkoja kaupungissa. Sovelluksella käyttäjät voivat lisätä, muokata ja poistaa parkkipaikkoja kartalta. Lisäksi parkkipaikkoja voi suodattaa tyypin, maksullisuuden ja maksutapojen perusteella.
           </p>
           <h4>Ominaisuudet:</h4>
           <ul>
             <li>Parkkipaikkojen lisääminen kartalle</li>
             <li>Parkkipaikkojen muokkaaminen ja poistaminen</li>
-            <li>Parkkipaikkojen suodattaminen tyypin ja maksullisuuden perusteella</li>
+            <li>Parkkipaikkojen suodattaminen tyypin, maksullisuuden ja maksutapojen perusteella</li>
             <li>Navigointi valittuun parkkipaikkaan</li>
             <li>Dark mode -tuki</li>
           </ul>
@@ -89,6 +89,7 @@ export default function InfoButton({ darkMode }) {
             <li>Klikkaa paikkaa nähdäksesi sen tiedot</li>
             <li>Vasemmalla on paneeli, joka tarjoaa vaihtoehtoja parkkipaikkojen suodattamiseen</li>
           </ul>
+          <p> <strong>Tekijät:</strong> Anssi Halomo, Taru Kajander, Antti-Jussi Suksi</p>
           <p style={{ fontSize: "12px", color: darkMode ? "#999" : "#666" }}>
             Versio 1.0 | Käyttö omalla vastuulla
           </p>

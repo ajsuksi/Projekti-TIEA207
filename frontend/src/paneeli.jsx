@@ -78,18 +78,15 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       <button
       onClick={() => setDarkMode(!darkMode)}
       style={{
-        backgroundColor: darkMode ? "#333" : "#ddd",
-        color: darkMode ? "#fff" : "#000",
-        width: "3rem",
-        height: "3rem",
+        background: "none",
         border: "none",
-        borderRadius: "4px",
-        padding: "5px 5px",
+        padding: "0",
         cursor: "pointer",
-        fontSize: "1.5rem"
+        marginTop: "1.5rem",
+        marginLeft: "0"
       }}
       >
-      {darkMode ? "☀️" : "🌙"}
+      {darkMode ? <img src="/src/icons/darkmode.png" alt="dark_mode" style={{height: "2.5rem"}} /> : <img src="/src/icons/lightmode.png" alt="light_mode" style={{height: "2.5rem"}} />}
       </button>
       <p style={{marginTop: "auto", fontSize: "0.8rem", color: darkMode ? "#999" : "#555", paddingBottom: "1rem"}}>Disclaimer:<br/>
         Käyttö omalla vastuulla</p>
