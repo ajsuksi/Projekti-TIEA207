@@ -34,6 +34,23 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
     availablePaymentMethods
   } = useFilterMarkers(markers);
 
+// Esilataa ikonit suorituskyvyn parantamiseksi
+useEffect(() => {
+  const imagesToPreload = [
+    "/src/icons/darkmode.png",
+    "/src/icons/lightmode.png",
+    "/src/icons/logo_dark.svg",
+    "/src/icons/logo.svg",
+    "/src/icons/burger_dark.svg",
+    "/src/icons/burger.svg"
+  ];
+  
+  imagesToPreload.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}, []);
+
 
  //Hakee paikat ja muuttaa ne sopivaan muotoon
   useEffect(() => {
@@ -90,7 +107,7 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
     }
   };
 
-  //valitse maksutavan
+  // Päivittää markerin kentän arvon
   const handleChange = (index, field, value) => {
     setMarkers((prev) =>
       prev.map((m, i) => (i === index ? { ...m, [field]: value } : m))
@@ -169,7 +186,7 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
               }            
               >
                 <Popup>  {editingMarker && editingMarker._id === marker._id ? (
-                    <MarkerPopup
+                    <MarkerPopup // Aukeaa, jos muokataan tallennettua paikkaa
                     marker={editingMarker}
                     idx={markers.findIndex(m => m._id === marker._id)}
                     handleChange={handleEditingChange}
@@ -179,8 +196,8 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
                     onSave={() => setEditingMarker(null)}
                     darkMode={darkMode}
                     />
-                  ) : marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
-                    <ViewPopup 
+                  ) : marker._id ? (
+                    <ViewPopup // Aukeaa, kun klikataan tallennettua paikkaa
                     marker={marker}
                     onEdit={handleEdit}
                     handleRemove={handleRemove}
@@ -188,7 +205,7 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
                     darkMode={darkMode}
                     />
                   ) :  (
-                    <MarkerPopup
+                    <MarkerPopup // Aukeaa, kun lisätään uusi paikka
                     marker={marker}
                     idx={idx}
                     handleChange={handleChange}
@@ -204,7 +221,7 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
         </MapContainer>
       </div>
       
-      {/* Info-painike ja chat-painike oikeaan alareunaan */}
+      {/* Oikeassa alareunassa chat- ja info-painikkeet */}
       <ChatButton darkMode={darkMode} />
       <InfoButton darkMode={darkMode} />
     </div>

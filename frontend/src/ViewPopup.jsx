@@ -25,15 +25,15 @@ export default function ViewPopup({ marker, onEdit, handleRemove, setRouteDestin
       </button>
       
       <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    console.log("Poistetaan marker:", marker._id);
-                    handleRemove(marker._id);
-                  }}
-                  style={buttonStyle.delete}
-                  >
-                    Poista
-                  </button>
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("Poistetaan marker:", marker._id);
+          handleRemove(marker._id);
+        }}
+        style={buttonStyle.delete}
+        >
+          Poista
+        </button>
     </div>
     
   );

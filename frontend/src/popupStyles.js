@@ -35,8 +35,8 @@ export const buttonStyle = {
   edit: (darkMode) => ({
     width: "100%",
     padding: "8px",
-    backgroundColor: /* darkMode ? "#444444" :  */"#BDAEA3",
-    color: /* darkMode ? "#ffffff" :  */"#000000",
+    backgroundColor: "#BDAEA3",
+    color: "#000000",
     borderRadius: "4px",
     cursor: "pointer",
     border: "none",
