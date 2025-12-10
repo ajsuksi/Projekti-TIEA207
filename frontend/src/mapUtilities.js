@@ -1,6 +1,7 @@
- export const saveMarker = async (marker) => {
-
-    const payload = {
+ 
+ 
+/**---Makerin rakennus--- */
+const buildPayload = (marker) =>({
       osoite: marker.osoite,
       tyyppi: marker.tyyppi,
       maksu: !!marker.maksu,
@@ -12,13 +13,17 @@
         lng: marker.lng,
       },
       lisatiedot: marker.lisatiedot || null,
-    };
-    
+
+});
+
+
+ /**---Markerin tallennus--- */
+ export const saveMarker = async (marker) => {
     try {
       const res = await fetch("http://localhost:3001/api/places/", {
         method: "POST",
         headers: { "Content-Type": "application/json"},
-        body: JSON.stringify(payload),
+        body: JSON.stringify(buildPayload(marker)),
       });
       const saved = await res.json();
       console.log("Marker saved", saved);
@@ -29,34 +34,19 @@
     }
   };
 
-/**
- * Päivittää olemassa olevan markerin tietokantaan
- */
+
+/**---Markerin päivitys---*/
 export const updateMarker = async (marker) => {
   if (!marker._id) {
     console.error("Marker _id puuttuu");
     return null;
   }
 
-  const payload = {
-    osoite: marker.osoite,
-    tyyppi: marker.tyyppi,
-    maksu: !!marker.maksu,
-    hinta: marker.hinta,
-    maksutapa: marker.maksutapa || [],
-    aikarajoitus: marker.aika || marker.aikarajoitus || null,
-    sijainti: {
-      lat: marker.lat,
-      lng: marker.lng,
-    },
-    lisatiedot: marker.lisatiedot || null,
-  };
-
   try {
     const res = await fetch(`http://localhost:3001/api/places/${marker._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(buildPayload(marker)),
     });
     
     if (!res.ok) {
@@ -78,15 +68,13 @@ export const updateMarker = async (marker) => {
   }
 };
 
-/**
- *palauttaa tietokannasta haetut paikat
- */
+
+/**Hakee tietokannasta markerit */
   export const getMarkers = async () => {
   try {
     const response = await fetch("http://localhost:3001/api/places");
-    if (!response.ok) {
-      throw new Error("Virhe paikkojen haussa");
-    }
+    if (!response.ok) throw new Error("Virhe paikkojen haussa");
+
     const data = await response.json();
     console.log("Haetut paikat:", data);
     return data;
