@@ -8,8 +8,6 @@ import ViewPopup from "./ViewPopup";
 import {useFilterMarkers } from "./Hooks/useFilterMarkers"
 import Ilmoitus from "./ilmoitus";
 import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
-import { RoutingMachine } from "./routing";
-import { useUserLocation } from "./UserLocation";
 import InfoButton from "./InfoButton";
 import ChatButton from "./ChatButton";
 import { RoutingMachine } from "./Navigation/routing";
