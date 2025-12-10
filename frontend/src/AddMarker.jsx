@@ -17,7 +17,6 @@ const MapClickHandler = ({ onAddMarker, isDisabled }) => {
         return;
       }
       
-
       const newMarker = {
         osoite: "",
         tyyppi: "",

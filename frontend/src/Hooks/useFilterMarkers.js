@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState} from "react";
 
 /**
  * @param {*} markers kaikki markerit kartalla
