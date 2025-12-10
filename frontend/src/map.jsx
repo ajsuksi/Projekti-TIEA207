@@ -128,6 +128,7 @@ useEffect(() => {
                     setMarkers={setMarkers}
                     setNotice={setNotice}
                     onSave={() => setEditingMarker(null)}
+                    onCancel={() => setEditingMarker(false)}  
                     darkMode={darkMode}
                     />
                   ) : marker._id ? (
