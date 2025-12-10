@@ -1,5 +1,5 @@
 
-export default function Paneeli ({ filters, availableTypes, onFreeChange, onTypeChange, filteredCount,onCostsChange, onPaymentMethodChange, availablePayments })  {
+export default function Paneeli ({ filters, availableTypes, onFreeChange, onTypeChange, filteredCount, onCostsChange, onPaymentMethodChange, availablePayments, darkMode, setDarkMode })  {
   return (
      <div
       style={{
@@ -12,8 +12,8 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         paddingLeft: "1rem",
         transform: "translateX(-11rem)", 
         transition: "transform 0.3s ease-in-out",
-        backgroundColor: "#ffffffff",
-        color: "Black",
+        backgroundColor: darkMode ? "#1e1e1e" : "#ffffffff",
+        color: darkMode ? "#ffffff" : "#000000",
         display: "flex",
         flexDirection: "row",
       }}
@@ -31,7 +31,7 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       <h4>Rajaa paikkoja:</h4>
       
       {/* Maksullisuus*/}
-      <label>
+      <label style={{ color: darkMode ? "#ffffff" : "#000000" }}>
         <input
           type="checkbox"
           checked={filters.freeOnly}
@@ -39,7 +39,7 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         />
         Vain ilmaiset
       </label>
-      <label>
+      <label style={{ color: darkMode ? "#ffffff" : "#000000" }}>
         <input
         type= "checkbox"
         checked={filters.vainMaksulliset}
@@ -51,7 +51,7 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       {/* Tyyppi */}
       <h4>Tyyppi</h4>
       {availableTypes.map(type => (
-        <label key={type} style={{ display: 'block' }}>
+        <label key={type} style={{ display: 'block', color: darkMode ? "#ffffff" : "#000000" }}>
           <input
             type="checkbox"
             checked={filters.valitutTyypit.includes(type)}
@@ -64,7 +64,7 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
       {/* Maksutapa */}
         <h4>Maksutapa</h4>
       {availablePayments.map(method => (
-        <label key={method} style={{ display: 'block' }}>
+        <label key={method} style={{ display: 'block', color: darkMode ? "#ffffff" : "#000000" }}>
           <input
             type="checkbox"
             checked={filters.valitutMaksutavat.includes(method)}
@@ -74,14 +74,27 @@ export default function Paneeli ({ filters, availableTypes, onFreeChange, onType
         </label>
       ))}
       
-      <p>Näytetään {filteredCount} paikkaa</p>
-      <p style={{marginTop: "auto", fontSize: "0.8rem", color: "#555", paddingBottom: "1rem"}}>Disclaimer:<br/>
+      <p style={{ color: darkMode ? "#ffffff" : "#000000" }}>Näytetään {filteredCount} paikkaa</p>
+      <button
+      onClick={() => setDarkMode(!darkMode)}
+      style={{
+        background: "none",
+        border: "none",
+        padding: "0",
+        cursor: "pointer",
+        marginTop: "1.5rem",
+        marginLeft: "0"
+      }}
+      >
+      {darkMode ? <img src="/src/icons/darkmode.png" alt="dark_mode" style={{height: "2.5rem"}} /> : <img src="/src/icons/lightmode.png" alt="light_mode" style={{height: "2.5rem"}} />}
+      </button>
+      <p style={{marginTop: "auto", fontSize: "0.8rem", color: darkMode ? "#999" : "#555", paddingBottom: "1rem"}}>Disclaimer:<br/>
         Käyttö omalla vastuulla</p>
     </div>
     <div style={{ width: "4rem", display: "flex", flexDirection: "column", marginLeft: "auto"}}>
-      <img src="/src/icons/logo.png" alt="logo" style={{ height: "5rem", width: "auto", alignSelf: "center", paddingRight: "1rem"}} />
+      {darkMode ? <img src="/src/icons/logo_dark.svg" alt="logo_dark" style={{ height: "5rem", width: "auto", alignSelf: "center", paddingRight: "1rem", paddingTop: "1rem"}} /> : <img src="/src/icons/logo.svg" alt="logo" style={{ height: "5rem", width: "auto", alignSelf: "center", paddingRight: "1rem", paddingTop: "1rem"}} /> }
       <div style={{flex: 1, display: "flex", justifyContent: "center", alignItems: "center", paddingRight: "1rem", marginBottom: "5rem"}}>
-        <img src="/src/icons/burger.png" alt="burger" style={{ height: "3rem", width: "3rem" }} />
+        {darkMode ? <img src="/src/icons/burger_dark.svg" alt="burger_dark" style={{ height: "3rem", width: "3rem" }} /> : <img src="/src/icons/burger.svg" alt="burger" style={{ height: "3rem", width: "3rem" }} />}
       </div>
     </div>
     </div>

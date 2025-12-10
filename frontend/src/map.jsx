@@ -8,6 +8,10 @@ import ViewPopup from "./ViewPopup";
 import {useFilterMarkers } from "./Hooks/useFilterMarkers"
 import Ilmoitus from "./ilmoitus";
 import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
+import { RoutingMachine } from "./routing";
+import { useUserLocation } from "./UserLocation";
+import InfoButton from "./InfoButton";
+import ChatButton from "./ChatButton";
 import { RoutingMachine } from "./Navigation/routing";
 import { useUserLocation } from "./Hooks/useUserLocation";
 import ExitNavigationButton  from "./Navigation/ExitNavigation";
@@ -15,7 +19,8 @@ import { useMarkers } from "./Hooks/useMarkers";
 import { useMarkerActions } from "./Hooks/useMarkerActions";
 
 
-export default function ParkingMap() {
+
+export default function ParkingMap({ darkMode, setDarkMode }) {
  const [notice, setNotice] = useState("");
  const [routeDestination, setRouteDestination] = useState(null);
  const { userLocation } = useUserLocation();
@@ -30,8 +35,7 @@ export default function ParkingMap() {
     handlePaymentMethodChange,
     availablePaymentMethods
   } = useFilterMarkers(markers);
-
-const {
+  const {
     editingMarker,
     setEditingMarker,
     handleRemove,
@@ -40,7 +44,24 @@ const {
     handleEditingChange,
   } = useMarkerActions(setMarkers, setNotice);
 
+// Esilataa ikonit suorituskyvyn parantamiseksi
+useEffect(() => {
+  const imagesToPreload = [
+    "/src/icons/darkmode.png",
+    "/src/icons/lightmode.png",
+    "/src/icons/logo_dark.svg",
+    "/src/icons/logo.svg",
+    "/src/icons/burger_dark.svg",
+    "/src/icons/burger.svg"
+  ];
   
+  imagesToPreload.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}, []);
+
+
   return (
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
       
@@ -60,6 +81,8 @@ const {
     onPaymentMethodChange={handlePaymentMethodChange}
     availablePayments={availablePaymentMethods}
     filteredCount={filteredPlaces.length}
+    darkMode={darkMode}
+    setDarkMode={setDarkMode}
     />
 
       {/* Kartta oikealle puolelle */}
@@ -99,7 +122,7 @@ const {
               }            
               >
                 <Popup>  {editingMarker && editingMarker._id === marker._id ? (
-                    <MarkerPopup
+                    <MarkerPopup // Aukeaa, jos muokataan tallennettua paikkaa
                     marker={editingMarker}
                     idx={markers.findIndex(m => m._id === marker._id)}
                     handleChange={handleEditingChange}
@@ -107,22 +130,25 @@ const {
                     setMarkers={setMarkers}
                     setNotice={setNotice}
                     onSave={() => setEditingMarker(null)}
+                    darkMode={darkMode}
                     />
-                  ) : marker._id ? ( /* Jos on id, ViewPopup, muuten MarkerPopup */
-                    <ViewPopup 
+                  ) : marker._id ? (
+                    <ViewPopup // Aukeaa, kun klikataan tallennettua paikkaa
                     marker={marker}
                     onEdit={handleEdit}
                     handleRemove={handleRemove}
                     setRouteDestination={setRouteDestination}
+                    darkMode={darkMode}
                     />
                   ) :  (
-                    <MarkerPopup
+                    <MarkerPopup // Aukeaa, kun lisätään uusi paikka
                     marker={marker}
                     idx={idx}
                     handleChange={handleChange}
                     handleRemove={handleRemove}
                     setMarkers={setMarkers}
                     setNotice={setNotice}
+                    darkMode={darkMode}
                     />
                   )}
                 </Popup>
@@ -130,6 +156,10 @@ const {
           ))}
         </MapContainer>
       </div>
+      
+      {/* Oikeassa alareunassa chat- ja info-painikkeet */}
+      <ChatButton darkMode={darkMode} />
+      <InfoButton darkMode={darkMode} />
     </div>
   );
 }

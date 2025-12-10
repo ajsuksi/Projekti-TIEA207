@@ -1,12 +1,15 @@
 import { useMap } from "react-leaflet";
-import { createCallHandleChange, createHandleSave } from "./popupHandlers";
+import {createCallHandleChange, createHandleSave} from "./popupHandlers";
+import { popupStyle, inputStyle, labelStyle, headingStyle, buttonStyle } from "./popupStyles";
+
 
 //PopUp lomakkeen hallinta
-export default function MarkerPopup({ marker, idx, handleChange, handleRemove, setMarkers, setNotice, onSave }) {
-  const map = useMap();
-  const getMarker = () => marker;
-  const callHandleChange = createCallHandleChange(getMarker, idx, handleChange);
-  const handleSave = createHandleSave({
+export default function MarkerPopup ({marker, idx, handleChange, handleRemove, setMarkers, setNotice, onSave, darkMode}){
+
+ const map = useMap();
+ const getMarker = () => marker;
+ const callHandleChange = createCallHandleChange(getMarker, idx, handleChange);
+ const handleSave = createHandleSave({
     getMarker,
     setMarkers,
     setNotice,

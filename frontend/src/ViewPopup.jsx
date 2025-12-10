@@ -1,3 +1,6 @@
+
+import { popupStyle, headingStyle, buttonStyle, textStyle } from "./popupStyles";
+
 export default function ViewPopup({ marker, onEdit, handleRemove, setRouteDestination }) {
   const containerStyle = {
     minWidth: 220,
