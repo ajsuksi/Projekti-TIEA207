@@ -4,25 +4,27 @@ import { MapContainer,TileLayer,Marker,Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MapClickHandler from "./AddMarker";
 import MarkerPopup from "./AddPopup";
-import { getMarkers } from "./mapUtilities";
 import ViewPopup from "./ViewPopup";
-import {useFilterMarkers } from "./filterMarkers"
+import {useFilterMarkers } from "./Hooks/useFilterMarkers"
 import Ilmoitus from "./ilmoitus";
 import { greenMarker, redMarker, blueMarker, orangeMarker } from "./markerColors";
 import { RoutingMachine } from "./routing";
 import { useUserLocation } from "./UserLocation";
 import InfoButton from "./InfoButton";
 import ChatButton from "./ChatButton";
+import { RoutingMachine } from "./Navigation/routing";
+import { useUserLocation } from "./Hooks/useUserLocation";
+import ExitNavigationButton  from "./Navigation/ExitNavigation";
+import { useMarkers } from "./Hooks/useMarkers";
+import { useMarkerActions } from "./Hooks/useMarkerActions";
 
 
 
 export default function ParkingMap({ darkMode, setDarkMode }) {
- const [markers, setMarkers] = useState([]);
  const [notice, setNotice] = useState("");
- const [editingMarker, setEditingMarker] = useState(null);
  const [routeDestination, setRouteDestination] = useState(null);
  const { userLocation } = useUserLocation();
-
+ const {markers, setMarkers} = useMarkers();
  const {
     filters,
     handleFreeChange,
@@ -33,6 +35,14 @@ export default function ParkingMap({ darkMode, setDarkMode }) {
     handlePaymentMethodChange,
     availablePaymentMethods
   } = useFilterMarkers(markers);
+  const {
+    editingMarker,
+    setEditingMarker,
+    handleRemove,
+    handleChange,
+    handleEdit,
+    handleEditingChange,
+  } = useMarkerActions(setMarkers, setNotice);
 
 // Esilataa ikonit suorituskyvyn parantamiseksi
 useEffect(() => {
@@ -52,88 +62,14 @@ useEffect(() => {
 }, []);
 
 
- //Hakee paikat ja muuttaa ne sopivaan muotoon
-  useEffect(() => {
-    const fetchData = async () => {
-      const places = await getMarkers(); 
-      const normalized = places.map((p) => {
-          const lat = p.sijainti?.lat ?? p.lat ?? null;
-          const lng = p.sijainti?.lng ?? p.lng ?? null;
-
-          // jos lat/lng ei ole numero, palauta null 
-          if (typeof lat !== "number" || typeof lng !== "number") return null;
-
-          return {
-
-            _id: p._id,
-            osoite:p.osoite,
-            tyyppi: p.tyyppi,
-            maksu: !!p.maksu,
-            hinta: p.hinta,
-            maksutapa: p.maksutapa,
-            aikarajoitus: p.aikarajoitus,
-            lisatiedot: p.lisatiedot,
-            lat,
-            lng,
-            isFree: !p.maksu,  
-          };
-        })
-        .filter(Boolean); // poistaa kaikki null-arvot
-      setMarkers(normalized);
-    };
-
-    fetchData();
-  }, []);
-
-  //Poistaa markerin
-  const handleRemove = async (markerId) => {
-    if (!markerId) {
-      setMarkers((prev) => prev.filter((m) => m._id !== markerId));
-      return;
-    }
-    
-    if (window.confirm("Haluatko varmasti poistaa parkkipaikan?")){      
-      try {
-        const response = await fetch(`http://localhost:3001/api/places/${markerId}`, {
-          method: "DELETE",
-        });
-        if(!response.ok) throw new Error("Tietokannasta poisto epäonnistui");
-        setMarkers((prev) => prev.filter((m) => m._id !== markerId));        
-        console.log("Paikka poistettu onnistuneesti");
-      } catch (error) {
-        console.error("Virhe poistossa:", error);
-        alert("Paikan poistaminen epäonnistui");
-      }
-    }
-  };
-
-  // Päivittää markerin kentän arvon
-  const handleChange = (index, field, value) => {
-    setMarkers((prev) =>
-      prev.map((m, i) => (i === index ? { ...m, [field]: value } : m))
-    );
-  };
-
-  //Asettaa markerin muokkaustilaan
-  const handleEdit = (marker) => {
-    setEditingMarker(marker);
-  };
-
-  //Muokattavan markerin kenttien päivitys
-  const handleEditingChange = (field, value) => {
-    const updated = { ...editingMarker, [field]: value };
-    setEditingMarker(updated);
-    //Päivitä myös markers-tilaa, jotta muutokset säilyvät
-    setMarkers((prev) =>
-      prev.map((m) => m._id === updated._id ? updated : m)
-    );
-  };
-
-
   return (
      <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
       
       <Ilmoitus message={notice}/>
+
+    {/* Poistuminen navigoinnista*/}
+    {routeDestination && (
+   <ExitNavigationButton onExit={() => setRouteDestination(null)} />)}
 
       {/* Vasen paneeli */}
     <Paneeli 

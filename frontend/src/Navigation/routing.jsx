@@ -6,9 +6,9 @@ import "leaflet-routing-machine";
 
 /**
  * Leafleting routingmachine, etsii reitin käyttäjän tämänhetkisestä sijainnista
- * haluttuun parkkipaikkaan.
- * @param {*} userLocation
- * @returns 
+ * valittuun parkkipaikkaan.
+ * @param userLocation käyttäjän nykyinen sijainti [lat,lng]
+ * @param routeDestination valittu parkkipaikka [lat,lng].
  */
 export const RoutingMachine = ({ userLocation, routeDestination }) => {
   const map = useMap();
